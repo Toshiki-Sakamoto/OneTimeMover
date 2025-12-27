@@ -6,7 +6,7 @@ namespace Core.Common.Messaging
     /// <summary>
     /// ただイベントを受け流すだけのメッセージバス
     /// </summary>
-    public class EventBus<T> : IPublisher<T>, ISubscriber<T>
+    public class EventBus<T> : IPublisher<T>, ISubscriber<T>, IUnsubscriber<T>
     {
         private readonly List<Action<T>> _subscribers = new();
 
@@ -20,5 +20,8 @@ namespace Core.Common.Messaging
 
         public void Subscribe(Action<T> handler)
             => _subscribers.Add(handler);
+
+        public void Unsubscribe(Action<T> handler)
+            => _subscribers.Remove(handler);
     }
 }

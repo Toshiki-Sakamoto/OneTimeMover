@@ -27,7 +27,10 @@ namespace Core.Common
 
         public object SpawnInstance(IServiceResolver resolver)
         {
-            return Activator.CreateInstance(_implementationType);
+            var instance = Activator.CreateInstance(_implementationType);
+            var injector = new ReflectionInjector();
+            injector.Inject(instance, resolver);
+            return instance;
         }
     }
 

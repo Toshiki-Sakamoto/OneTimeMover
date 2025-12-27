@@ -24,13 +24,13 @@ namespace Core.Game
 
         public void OnEnter(IPhaseContext<GamePhase> context)
         {
-            var initNum = _stageUseCase.GetInitCargoNum();
-            for (var i = 0; i < initNum; ++i)
-            {
-                var cargo = _cargoFactory.Create(_stageUseCase.GetRandomCargoMaster());
-            }
+//            var initNum = _stageUseCase.GetInitCargoNum();
+//            for (var i = 0; i < initNum; ++i)
+//            {
+//                var cargo = _cargoFactory.Create(_stageUseCase.GetRandomCargoMaster());
+//            }
 
-            DelayStartAsync(context);
+//            DelayStartAsync(context);
         }
 
         public void OnUpdate(IPhaseContext<GamePhase> context, float deltaTime)

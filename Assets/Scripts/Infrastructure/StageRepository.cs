@@ -4,14 +4,14 @@ namespace OneTripMover.Infrastructure
 {
     public class StageRepository : IStageRepository
     {
-        private int _currentStageId;
+        private StageId _currentStageId;
         
-        public void SetCurrentState(int stageId)
+        public void SetCurrentState(StageId stageId)
         {
             _currentStageId = stageId;
         }
 
-        public int GetCurrentStageId()
+        public StageId GetCurrentStageId()
         {
             return _currentStageId;
         }

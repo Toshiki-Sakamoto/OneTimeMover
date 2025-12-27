@@ -1,6 +1,7 @@
 using System;
 using Core.Common;
 using Core.Common.Messaging;
+using MoreMountains.Feedbacks;
 using OneTripMover.Views.Player;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace Views.Cargo
         [SerializeField] private Transform _triggerdRoot;
         [SerializeField] private Transform _notTriggeredRoot;
         [SerializeField] private Transform _cargoRoot;
+        [SerializeField] private MMF_Player _pickupFeedback;
         
         private IPublisher<CargoDropItemTouchedEvent> _touchedPublisher;
         private IPublisher<CargoDropItemTouchOutedEvent> _touchOutedPublisher;
@@ -91,6 +93,8 @@ namespace Views.Cargo
             }
 
             enabled = false;
+            
+            _pickupFeedback.PlayFeedbacks();
         }
     }
 }

@@ -49,6 +49,7 @@ namespace Core.Phase
             // 次をセット
             if (_executors.TryGetValue(next, out var exec))
             {
+                OnBeforeEnter(next);
                 _current = exec;
                 _context.SetCurrent(next);
                 _current.Enter(_context);
@@ -77,6 +78,7 @@ namespace Core.Phase
 
                 if (_executors.TryGetValue(next, out var exec))
                 {
+                    OnBeforeEnter(next);
                     _current = exec;
                     _context.SetCurrent(next);
                     _current.Enter(_context);
@@ -126,6 +128,13 @@ namespace Core.Phase
             {
                 _hasPending = false;
             }
+        }
+
+        /// <summary>
+        /// Enter直前のフック。派生でイベント送信などに利用。
+        /// </summary>
+        protected virtual void OnBeforeEnter(TPhase nextPhase)
+        {
         }
     }
 }

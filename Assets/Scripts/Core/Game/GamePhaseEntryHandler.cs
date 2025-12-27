@@ -6,10 +6,16 @@ namespace Core.Game
 {
     public class GamePhaseEntryHandler : IGamePhaseEntryHandler
     {
+        private readonly IStageUseCase _stageUseCase;
+        
+        public GamePhaseEntryHandler()
+        {
+            _stageUseCase = ServiceLocator.Resolve<IStageUseCase>();
+        }
+        
         public void OnEnter(IPhaseContext<GamePhase> context)
         {
-            var stageUseCase = ServiceLocator.Resolve<IStageUseCase>();
-            stageUseCase.SetCurrentStage(1);
+            _stageUseCase.SetCurrentStage(1);
             
             context.RequestChange(GamePhase.Initialize);
         }

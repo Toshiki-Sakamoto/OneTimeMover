@@ -18,6 +18,8 @@ namespace OneTripMover.Infrastructure
             ServiceLocatorExtensions.RegisterAllEventBuses();
             
             RegisterSingleton<IAsyncInitializable, GameEntry>();
+            RegisterSingleton<IGameEventHandlers, GameEventHandlers>();
+            RegisterSingleton<IStageEventHandler, StageEventHandler>();
             
             RegisterSingleton<ICargoMasterRegistry, CargoMasterRegistry>();
             RegisterSingleton<IStageMasterRegistry, StageMasterRegistry>();

@@ -2,7 +2,7 @@
 {
     public interface IStageRepository
     {
-        void SetCurrentState(int stageId);
-        int GetCurrentStageId();
+        void SetCurrentState(StageId stageId);
+        StageId GetCurrentStageId();
     }
 }

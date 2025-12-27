@@ -25,6 +25,7 @@ namespace Views.Cargo
         
         private ICargoJointBreakHandler _jointBreakHandler;
         private Collider2D _collider2D;
+        private Quaternion _initialCargoVisualRootRotation;
         
         public CargoId Id { get; }
         public bool IsPreview => _isPreview;
@@ -64,6 +65,13 @@ namespace Views.Cargo
             _rigidbody.bodyType = RigidbodyType2D.Dynamic;
             _fixedJoint.enabled = true;
             Collider2D.enabled = true;
+            
+            // 左右反転(1/2)
+            var isFlip = UnityEngine.Random.value > 0.5f;
+
+            var randomRotation = UnityEngine.Random.Range(-_spawnRandomRotationRange, _spawnRandomRotationRange);
+            _cargoRoot.rotation = Quaternion.Euler(0f, 0f, randomRotation) * _initialCargoVisualRootRotation *
+                                  (isFlip ? Quaternion.Euler(0f, 0f, 180f) : Quaternion.identity);
         }
 
 
@@ -74,18 +82,15 @@ namespace Views.Cargo
         
         private void Awake()
         {
+            _initialCargoVisualRootRotation = _cargoRoot.rotation;
+            
             if (_isPreview)
             {
                 ChangePreview();
             }
             else
             {
-                // 左右反転(1/2)
-                var isFlip = UnityEngine.Random.value > 0.5f;
-
-                var randomRotation = UnityEngine.Random.Range(-_spawnRandomRotationRange, _spawnRandomRotationRange);
-                _cargoRoot.rotation = Quaternion.Euler(0f, 0f, randomRotation) * _cargoRoot.rotation *
-                                      (isFlip ? Quaternion.Euler(0f, 0f, 180f) : Quaternion.identity);
+                ChangeNormal();
             }
         }
 

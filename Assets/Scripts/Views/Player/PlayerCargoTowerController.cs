@@ -17,12 +17,20 @@ namespace OneTripMover.Views.Player
         [SerializeField] private Rigidbody2D _anchorRigidbody;
         [SerializeField] private Transform _cargoTowerRoot;
         [SerializeField] private float _gap = 0f;
+        [SerializeField] private float _movementBalanceAssist = 1.5f;
+        [SerializeField] private float _collapseAngleDeg = 45f;
+        [SerializeField] private float _dangerMarginDeg = 10f;
         
         private List<IAssetLoadHandle<CargoView>> _cargoViews = new ();
+        private readonly List<CargoView> _cargoViewRefs = new();
         private IAssetLoader _assetLoader;
         private CancellationToken _cancellationToken;
         private FixedJoint2D _joint;
         private IPublisher<CargoJointViewBreakEvent> _jointBreakPublisher;
+        private IPublisher<CargoTowerDangerLeanEvent> _dangerPublisher;
+        private IPublisher<CargoTowerDangerClearedEvent> _dangerClearedPublisher;
+        private PlayerController _playerController;
+        private bool _isInDanger;
         
         public CargoView TopCargoView { get; private set; }
 
@@ -31,7 +39,16 @@ namespace OneTripMover.Views.Player
         {
             _assetLoader = ServiceLocator.Resolve<IAssetLoader>();
             _jointBreakPublisher = ServiceLocator.Resolve<IPublisher<CargoJointViewBreakEvent>>();
+            _dangerPublisher = ServiceLocator.Resolve<IPublisher<CargoTowerDangerLeanEvent>>();
+            _dangerClearedPublisher = ServiceLocator.Resolve<IPublisher<CargoTowerDangerClearedEvent>>();
         }
+
+        private void Awake()
+        {
+            _playerController = GetComponent<PlayerController>();
+        }
+
+        private void Update() => CheckDangerLean();
         
         public void SetCancellationToken(CancellationToken cancellationToken)
         {
@@ -50,14 +67,30 @@ namespace OneTripMover.Views.Player
             ConnectJoint(view);
 
             _cargoViews.Add(handle);
+            RegisterCargoView(view);
+            TopCargoView = view;
+        }
+
+        public void AttachExistingCargo(CargoView view)
+        {
+            if (view == null) return;
+
+            view.SetJointBreakHandler(this);
+            view.ChangeNormal();
+            view.transform.SetParent(_cargoTowerRoot, false);
+            view.transform.localRotation = Quaternion.identity;
+
+            PositionOnTop(view);
+            ConnectJoint(view);
+
+            RegisterCargoView(view);
             TopCargoView = view;
         }
         
         public void SetAllCargoBreakAction(JointBreakAction2D breakAction)
         {
-            foreach (var handle in _cargoViews)
+            foreach (var view in _cargoViewRefs)
             {
-                var view = handle.Asset;
                 if (view == null) continue;
 
                 var joint = view.GetComponent<FixedJoint2D>();
@@ -71,7 +104,9 @@ namespace OneTripMover.Views.Player
         public void AddBalanceForce(Vector2 force)
         {
             if (TopCargoView == null) return;
-            TopCargoView.AddForce(force);
+
+            var assistMultiplier = GetAssistMultiplierFromMovement();
+            TopCargoView.AddForce(force * assistMultiplier);
         }
 
         public void OnCargoJointBreak(CargoView cargoView)
@@ -117,6 +152,65 @@ namespace OneTripMover.Views.Player
         {
             var col = go.GetComponent<Collider2D>();
             return col != null ? col.bounds.size.y : 1f;
+        }
+
+        private void CheckDangerLean()
+        {
+            if (_anchorRigidbody == null || TopCargoView == null)
+            {
+                _isInDanger = false;
+                return;
+            }
+
+            var dir = (Vector2)(TopCargoView.transform.position - (Vector3)_anchorRigidbody.position);
+            if (dir == Vector2.zero) return;
+
+            var angle = Mathf.Abs(Vector2.SignedAngle(Vector2.up, dir));
+            var dangerThreshold = Mathf.Max(0f, _collapseAngleDeg - _dangerMarginDeg);
+            var inDanger = angle >= dangerThreshold && angle < _collapseAngleDeg;
+
+            if (inDanger && !_isInDanger)
+            {
+                _isInDanger = true;
+                _dangerPublisher?.Publish(new CargoTowerDangerLeanEvent
+                {
+                    Player = _playerController,
+                    CurrentAngleDeg = angle,
+                    CollapseAngleDeg = _collapseAngleDeg,
+                    DangerMarginDeg = _dangerMarginDeg
+                });
+            }
+            else if (!inDanger && _isInDanger)
+            {
+                _isInDanger = false;
+                _dangerClearedPublisher?.Publish(new CargoTowerDangerClearedEvent
+                {
+                    Player = _playerController,
+                    CurrentAngleDeg = angle,
+                    CollapseAngleDeg = _collapseAngleDeg,
+                    DangerMarginDeg = _dangerMarginDeg
+                });
+            }
+        }
+
+        private float GetAssistMultiplierFromMovement()
+        {
+            // タワーが傾いている方向へ歩いているときはバランス入力を強める
+            if (_anchorRigidbody == null || TopCargoView == null) return 1f;
+
+            var leanDir = Mathf.Sign(TopCargoView.transform.position.x - _anchorRigidbody.position.x);
+            var moveDir = Mathf.Sign(_anchorRigidbody.linearVelocity.x);
+
+            if (Mathf.Approximately(leanDir, 0f) || Mathf.Approximately(moveDir, 0f)) return 1f;
+            if (!Mathf.Approximately(leanDir, moveDir)) return 1f;
+
+            return 1f + _movementBalanceAssist;
+        }
+
+        private void RegisterCargoView(CargoView view)
+        {
+            if (view == null) return;
+            _cargoViewRefs.Add(view);
         }
 
         private float GetTopY(GameObject go) =>

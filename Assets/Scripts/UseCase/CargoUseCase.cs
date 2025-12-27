@@ -25,7 +25,6 @@ namespace OneTripMover.UseCase
         {
             _cargoRegistry.Register(cargo);
             
-            // ゲーム開始前はBreakは無視
             _cargoAddedEventPublisher.Publish(new CargoAddedEvent { Cargo = cargo });
         }
     }

@@ -7,7 +7,9 @@ namespace Core.Stage
         /// <summary>
         /// 現在のステージ
         /// </summary>
-        void SetCurrentStage(int stageId);
+        void SetCurrentStage(StageId stageId);
+        
+        StageId GetCurrentStage();
         
         /// <summary>
         /// 初期荷物数の取得

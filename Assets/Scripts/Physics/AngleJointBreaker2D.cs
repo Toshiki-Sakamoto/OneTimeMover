@@ -55,7 +55,7 @@ public class AngleJointBreaker2D : MonoBehaviour
     {
         _broken = true;
         
-        Debug.Log($"AngleJointBreaker2D: Joint broken due to angle exceeding threshold. Angle: {ComputeAngle()} deg", this);
+        Debug.Log($"AngleJointBreaker2D: Angle: {ComputeAngle()}, Name: {name}", this);
 
         // OnJointBreak2Dを手動で通知
         gameObject.SendMessage("OnJointBreak2D", _joint, SendMessageOptions.DontRequireReceiver);

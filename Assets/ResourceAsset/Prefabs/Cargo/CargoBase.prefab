@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4940608646585964810}
   - component: {fileID: 1083638805357197965}
   - component: {fileID: 7257730467931776830}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CargoBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,10 +72,10 @@ FixedJoint2D:
   m_GameObject: {fileID: 2418735021799189401}
   m_Enabled: 1
   serializedVersion: 4
-  m_EnableCollision: 1
+  m_EnableCollision: 0
   m_ConnectedRigidBody: {fileID: 0}
-  m_BreakForce: 170
-  m_BreakTorque: 50
+  m_BreakForce: 1000000
+  m_BreakTorque: 1000000
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
@@ -134,7 +134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7005264154168537335}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -21,14 +21,17 @@ namespace OneTripMover.Input
         private IPublisher<PlayerPickupInputEvent> _pickupInputEventPublisher;
         private IPlayerInputHandler _inputHandler;
         private PlayerController _playerController;
+        private bool _inputEnabled = true;
 
         [Inject]
         public void Construct(
             IPublisher<PlayerInputEvent> inputPublisher,
-            IPublisher<PlayerPickupInputEvent> pickupInputPublisher)
+            IPublisher<PlayerPickupInputEvent> pickupInputPublisher,
+            ISubscriber<PlayerInputEnableEvent> inputEnableSubscriber)
         {
             _playerInputEventPublisher = inputPublisher;
             _pickupInputEventPublisher = pickupInputPublisher;
+            inputEnableSubscriber.Subscribe(OnInputEnableChanged);
         }
 
         private void SetHandler(IPlayerInputHandler handler) =>
@@ -48,6 +51,8 @@ namespace OneTripMover.Input
 
         private void Update()
         {
+            if (!_inputEnabled) return;
+
             Vector2? moveInput = null;
             float? balanceInput = null;
             bool isAnyInput = false;
@@ -59,7 +64,7 @@ namespace OneTripMover.Input
                 isAnyInput = true;
             }
             
-            if (_balanceAction.action.IsPressed())
+            if (_balanceAction != null && _balanceAction.action.triggered)
             {
                 balanceInput = _balanceAction.action.ReadValue<Vector2>().x;
                 isAnyInput = true;
@@ -77,6 +82,11 @@ namespace OneTripMover.Input
                     Player = _playerController
                 });
             }
+        }
+
+        private void OnInputEnableChanged(PlayerInputEnableEvent evt)
+        {
+            _inputEnabled = evt.Enabled;
         }
     }
 }

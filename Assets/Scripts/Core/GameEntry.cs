@@ -13,11 +13,13 @@ namespace OneTripMover.Core
     {
         private IMasterDataLoader _masterDataLoader;
         private IPhaseService<GamePhase> _gamePhaseService;
+        private IGameEventHandlers _gameEventHandlers;
 
         public void Initialize()
         {
             _masterDataLoader = ServiceLocator.Resolve<IMasterDataLoader>();
             _gamePhaseService = ServiceLocator.Resolve<IPhaseService<GamePhase>>();
+            _gameEventHandlers = ServiceLocator.Resolve<IGameEventHandlers>();
             
             _gamePhaseService.Initialize();
         }
