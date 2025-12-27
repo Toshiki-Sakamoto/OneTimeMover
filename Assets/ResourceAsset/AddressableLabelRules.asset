@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09390eb9d711df845b66898cfe68f5d6, type: 3}
+  m_Name: AddressableLabelRules
+  m_EditorClassIdentifier: 
+  rules:
+  - target: {fileID: 102900000, guid: 7bd60b811d0ea0140988f956aff92621, type: 3}
+    label: Cargo
+    includeSubfolders: 1
+    groupName: Master
+    createGroupIfMissing: 1
+  - target: {fileID: 102900000, guid: 0fa1a9ff7e91dd045998be64c9574d79, type: 3}
+    label: Stage
+    includeSubfolders: 1
+    groupName: Master
+    createGroupIfMissing: 1
+  - target: {fileID: 102900000, guid: 67b7ffd1464396f47973515f560ee545, type: 3}
+    label: Define
+    includeSubfolders: 1
+    groupName: Master
+    createGroupIfMissing: 1
+  - target: {fileID: 102900000, guid: f7edac7a6e3d844498517932676a4164, type: 3}
+    label: CargoView
+    includeSubfolders: 1
+    groupName: Cargo
+    createGroupIfMissing: 1

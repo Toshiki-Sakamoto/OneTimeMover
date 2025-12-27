@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Cargo
+  m_EditorClassIdentifier: 
+  m_GroupName: Cargo
+  m_GUID: 35a904546bda30747bb2017e40a86c47
+  m_SerializeEntries:
+  - m_GUID: 0a67946db7f28a04eaae87550bc97e5e
+    m_Address: Assets/ResourceAsset/Prefabs/Cargo/Cargo--Table.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CargoView
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8bd8e6d80f6155d42bb46ca87befc035
+    m_Address: Assets/ResourceAsset/Prefabs/Cargo/Cargo-Light 1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CargoView
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d78d1fb0e23f5a14a889d5331e965005
+    m_Address: Assets/ResourceAsset/Prefabs/Cargo/Cargo-Table 1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CargoView
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d51e57e57c6e44443a4e6c21b4b7e2ca, type: 2}
+  m_SchemaSet:
+    m_Schemas: []

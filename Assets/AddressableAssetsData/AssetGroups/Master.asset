@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Master
+  m_EditorClassIdentifier: 
+  m_GroupName: Master
+  m_GUID: 812c3af52c750b34f81ab97401de202d
+  m_SerializeEntries:
+  - m_GUID: 450be3b1aabcd5c47abc0737aad8e6d8
+    m_Address: Assets/Masters/Strage/Stage001Master.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Stage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df4d19f907c0bf1449bbe97f5444857d
+    m_Address: Assets/Masters/Cargo/SmallCargo.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cargo
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7a913e8394b41d43b6408eb0d8113ad
+    m_Address: Assets/Masters/Define/DefineMaster.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Define
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d51e57e57c6e44443a4e6c21b4b7e2ca, type: 2}
+  m_SchemaSet:
+    m_Schemas: []
