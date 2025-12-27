@@ -8,5 +8,6 @@ namespace Core.Cargo
     {
         public AssetReferenceGameObject CargoView { get; }
         public CargoId CargoId { get; }
+        public Money.Money Cost { get; }
     }
 }

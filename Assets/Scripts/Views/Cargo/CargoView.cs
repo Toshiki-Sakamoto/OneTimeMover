@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Core.Attribute;
 using OneTripMover.Core;
 using UnityEngine;
@@ -8,6 +8,11 @@ namespace Views.Cargo
     public interface ICargoJointBreakHandler
     {
         void OnCargoJointBreak(CargoView cargoView);
+    }
+
+    public interface ICargoGroundHitHandler
+    {
+        void OnCargoGroundHit(CargoView cargoView, Collision2D collision);
     }
     
     /// <summary>
@@ -21,9 +26,11 @@ namespace Views.Cargo
         [SerializeField] private Transform _cargoRoot;
         [SerializeField] private Transform _cargoVisualRoot;
         [SerializeField] private bool _isPreview;
+        [SerializeField] private LayerMask _groundLayerMask;
         [SerializeReference, SelectableSerializeReference] private ICargoComponent[] _previewComponents;
         
         private ICargoJointBreakHandler _jointBreakHandler;
+        private ICargoGroundHitHandler _groundHitHandler;
         private Collider2D _collider2D;
         private Quaternion _initialCargoVisualRootRotation;
         
@@ -34,6 +41,11 @@ namespace Views.Cargo
         public void SetJointBreakHandler(ICargoJointBreakHandler handler)
         {
             _jointBreakHandler = handler;
+        }
+        
+        public void SetGroundHitHandler(ICargoGroundHitHandler handler)
+        {
+            _groundHitHandler = handler;
         }
 
         public void AddForce(Vector2 force)
@@ -103,6 +115,12 @@ namespace Views.Cargo
                     component.UpdateCargoView(this, Time.deltaTime);
                 }
             }
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (((1 << collision.collider.gameObject.layer) & _groundLayerMask.value) == 0) return;
+            _groundHitHandler?.OnCargoGroundHit(this, collision);
         }
     }
 }

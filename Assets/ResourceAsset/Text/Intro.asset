@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48576d7ef7f25cd46b977efb8b0c5199, type: 3}
+  m_Name: Intro
+  m_EditorClassIdentifier: 
+  ViewKey: truck
+  Lines:
+  - "\u30D0\u30A4\u30C8\u541B\u3002\u304A\u75B2\u308C"
+  - "\u5BB6\u5177\u3092\u843D\u3068\u3057\u3066\u58CA\u3057\u305F\u3089\n\u3082\u3061\u308D\u3093<color=red>\u7F70\u91D1</color>\u3060"
+  - "\u3082\u3057\u4E00\u3064\u3082\u843D\u3068\u3055\u305A\u306B\n\u7D0D\u54C1\u51FA\u6765\u305F\u3089\u30DC\u30FC\u30CA\u30B9\u3082\u3042\u308B\u305E"
+  - "\u305D\u308C\u3067\u306F\u9811\u5F35\u3063\u3066\u304F\u308C"

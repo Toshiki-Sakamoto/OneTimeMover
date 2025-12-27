@@ -19,7 +19,7 @@ MonoBehaviour:
     bakeCurves: 1
   appearance:
     stateParams:
-      amplitude: 4.4
+      amplitude: 2.4
       progressIndexWithTime: 0
     phaseParams:
       charOffset: 0.114
@@ -27,7 +27,7 @@ MonoBehaviour:
       speed: 1.54
     stateCurve: {fileID: 11400000, guid: 70cc4b53ebdee48f489178d24bbef4d9, type: 2}
     playback: {fileID: 11400000, guid: 70d5b5db9762743afa895ebe0e9ea4cb, type: 2}
-  persistant:
+  persistent:
     stateParams:
       amplitude: 1
       progressIndexWithTime: 1

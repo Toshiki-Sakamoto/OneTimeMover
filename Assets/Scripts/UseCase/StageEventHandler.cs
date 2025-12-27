@@ -13,8 +13,7 @@ namespace OneTripMover.UseCase
         private ICargoUseCase _cargoUseCase;
         private ICargoFactory _cargoFactory;
         
-        [Inject]
-        public void Construct()
+        public StageEventHandler()
         {
             _stageUseCase = ServiceLocator.Resolve<IStageUseCase>();
             _cargoUseCase = ServiceLocator.Resolve<ICargoUseCase>();

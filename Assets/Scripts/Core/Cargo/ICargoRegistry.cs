@@ -1,4 +1,6 @@
-﻿namespace Core.Cargo
+﻿using OneTripMover.Core;
+
+namespace Core.Cargo
 {
     public interface ICargoRegistry
     {
@@ -12,5 +14,7 @@
         /// 現在の最上位の荷物を取得
         /// </summary>
         ICargo GetTopCargo();
+
+        bool TryGet(CargoId cargoId, out ICargo cargo);
     }
 }

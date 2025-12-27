@@ -420,7 +420,7 @@
                     "id": "901fafa6-0659-4240-8a58-3aa0f255e899",
                     "path": "2DVector",
                     "interactions": "",
-                    "processors": "NormalizeVector2,ScaleVector2(x=0.01,y=0.1)",
+                    "processors": "NormalizeVector2",
                     "groups": "",
                     "action": "Balance",
                     "isComposite": true,
@@ -478,7 +478,7 @@
                     "name": "Submit",
                     "type": "Button",
                     "id": "7607c7b6-cd76-4816-beef-bd0341cfe950",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

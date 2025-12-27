@@ -12,7 +12,10 @@ using Views.Cargo;
 
 namespace OneTripMover.Views.Player
 {
-    public class PlayerCargoTowerController : MonoBehaviour, IPlayerBalanceHandler, ICargoJointBreakHandler
+    public class PlayerCargoTowerController : MonoBehaviour, 
+        IPlayerBalanceHandler, 
+        ICargoJointBreakHandler,
+        ICargoGroundHitHandler
     {
         [SerializeField] private Rigidbody2D _anchorRigidbody;
         [SerializeField] private Transform _cargoTowerRoot;
@@ -28,6 +31,8 @@ namespace OneTripMover.Views.Player
         private FixedJoint2D _joint;
         private IPublisher<CargoJointViewBreakEvent> _jointBreakPublisher;
         private IPublisher<CargoTowerDangerLeanEvent> _dangerPublisher;
+        private IPublisher<CargoViewDetachedEvent> _detachedPublisher;
+        private IPublisher<CargoViewGroundHitEvent> _groundHitPublisher;
         private IPublisher<CargoTowerDangerClearedEvent> _dangerClearedPublisher;
         private PlayerController _playerController;
         private bool _isInDanger;
@@ -40,6 +45,8 @@ namespace OneTripMover.Views.Player
             _assetLoader = ServiceLocator.Resolve<IAssetLoader>();
             _jointBreakPublisher = ServiceLocator.Resolve<IPublisher<CargoJointViewBreakEvent>>();
             _dangerPublisher = ServiceLocator.Resolve<IPublisher<CargoTowerDangerLeanEvent>>();
+            _detachedPublisher = ServiceLocator.Resolve<IPublisher<CargoViewDetachedEvent>>();
+            _groundHitPublisher = ServiceLocator.Resolve<IPublisher<CargoViewGroundHitEvent>>();
             _dangerClearedPublisher = ServiceLocator.Resolve<IPublisher<CargoTowerDangerClearedEvent>>();
         }
 
@@ -62,6 +69,7 @@ namespace OneTripMover.Views.Player
             
             var view = handle.Asset;
             view.SetJointBreakHandler(this);
+            view.SetGroundHitHandler(this);
             
             PositionOnTop(view);
             ConnectJoint(view);
@@ -76,6 +84,7 @@ namespace OneTripMover.Views.Player
             if (view == null) return;
 
             view.SetJointBreakHandler(this);
+            view.SetGroundHitHandler(this);
             view.ChangeNormal();
             view.transform.SetParent(_cargoTowerRoot, false);
             view.transform.localRotation = Quaternion.identity;
@@ -112,6 +121,22 @@ namespace OneTripMover.Views.Player
         public void OnCargoJointBreak(CargoView cargoView)
         {
             _jointBreakPublisher.Publish(new CargoJointViewBreakEvent { CargoView = cargoView });
+            _detachedPublisher.Publish(new CargoViewDetachedEvent
+            {
+                CargoId = cargoView.Id,
+                CargoView = cargoView
+            });
+            RemoveCargoView(cargoView);
+        }
+        
+        public void OnCargoGroundHit(CargoView cargoView, Collision2D collision)
+        {
+            _groundHitPublisher.Publish(new CargoViewGroundHitEvent
+            {
+                CargoId = cargoView.Id,
+                CargoView = cargoView,
+                Collision = collision
+            });
         }
         
         private void PositionOnTop(CargoView view)
@@ -211,6 +236,13 @@ namespace OneTripMover.Views.Player
         {
             if (view == null) return;
             _cargoViewRefs.Add(view);
+        }
+
+        private void RemoveCargoView(CargoView view)
+        {
+            if (view == null) return;
+            _cargoViewRefs.Remove(view);
+            TopCargoView = _cargoViewRefs.Count > 0 ? _cargoViewRefs[^1] : null;
         }
 
         private float GetTopY(GameObject go) =>

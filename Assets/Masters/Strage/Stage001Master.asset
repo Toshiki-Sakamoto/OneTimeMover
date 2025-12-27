@@ -20,3 +20,5 @@ MonoBehaviour:
   _initCargoNum: 3
   _initCargoMasters:
   - {fileID: 11400000, guid: df4d19f907c0bf1449bbe97f5444857d, type: 2}
+  _introAdventure: {fileID: 11400000, guid: 07562076dfb80f04abb92a351541ae70, type: 2}
+  _clearAdventure: {fileID: 0}

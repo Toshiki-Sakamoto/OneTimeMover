@@ -18,6 +18,7 @@ namespace OneTripMover.UseCase
         
         public void SetCurrentStage(int stageId)
         {
+            _stageRepository.SetCurrentState(stageId);
         }
 
         public void SetCurrentStage(StageId stageId)

@@ -1,4 +1,5 @@
 using Core.Cargo;
+using Core.Adventure;
 using Core.Stage;
 using OneTripMover.Master;
 using UnityEngine;
@@ -21,12 +22,16 @@ namespace Master
         [SerializeField, HideInInspector] private string _sceneName;
         [SerializeField] private int _initCargoNum = 3;
         [SerializeField] private CargoMaster[] _initCargoMasters;
+        [SerializeField] private AdvText _introAdventure;
+        [SerializeField] private AdvText _clearAdventure;
 
         public int StageId => _stageID;
         public string Scene => _sceneName;
         public int InitCargoNum => _initCargoNum;
 
         public ICargoMaster[] InitCargoMasters => _initCargoMasters;
+        public AdvText IntroAdventure => _introAdventure;
+        public AdvText ClearAdventure => _clearAdventure;
 
         protected override void OnValidateCore()
         {

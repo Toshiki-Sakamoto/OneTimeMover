@@ -1,13 +1,17 @@
 using Core.Cargo;
 using Core.Common;
+using Core.Adventure;
 using Core.Game;
 using Core.Phase;
 using Core.Stage;
+using Core.Money;
 using Master;
 using OneTripMover.Asset;
 using OneTripMover.Core;
 using OneTripMover.Master;
 using OneTripMover.UseCase;
+using UI.GameOver;
+using UI.Adventure;
 
 namespace OneTripMover.Infrastructure
 {
@@ -46,6 +50,20 @@ namespace OneTripMover.Infrastructure
             RegisterSingleton<IStageRepository, StageRepository>();
             RegisterSingleton<ICargoRegistry, CargoRegistry>();
             RegisterSingleton<ICargoUseCase, CargoUseCase>();
+            RegisterSingleton<IMoneyRepository, MoneyRepository>();
+            RegisterSingleton<IMoneyUseCase, MoneyUseCase>();
+            RegisterSingleton<IMoneyEventHandler, MoneyEventHandler>();
+            RegisterSingleton<ICargoEventHandler, CargoEventHandler>();
+            RegisterSingleton<IGameOverUIController, GameOverUIController>();
+            RegisterSingleton<GameOverUIViewEventHandler, GameOverUIViewEventHandler>();
+            RegisterSingleton<IAdventureService, AdventureService>();
+            RegisterSingleton<AdventureUIController, AdventureUIController>();
+            RegisterSingleton<InputSystem_Actions, InputSystem_Actions>();
+            RegisterSingleton<OneTripMover.Input.IInputContextUseCase, OneTripMover.Input.InputContextUseCase>();
+
+            // ヒエラルキー上のUIコンポーネントを検索登録
+            RegisterComponentInHierarchy<GameOverUIView>();
+            RegisterComponentInHierarchy<IAdventureUIView>();
         }
     }
 }

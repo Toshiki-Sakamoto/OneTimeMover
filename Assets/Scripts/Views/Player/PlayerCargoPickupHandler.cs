@@ -37,11 +37,9 @@ namespace OneTripMover.Views.Player
             }
         }
 
-        private bool IsSelf(PlayerController player) => player == _playerController;
-
         private void OnDropTouched(CargoDropItemTouchedEvent evt)
         {
-            if (!IsSelf(evt.Player)) return;
+            if (evt.Player != _playerController) return;
             if (evt.DropItem == null) return;
 
             _touchingItems.Add(evt.DropItem);
@@ -49,7 +47,7 @@ namespace OneTripMover.Views.Player
 
         private void OnDropTouchOuted(CargoDropItemTouchOutedEvent evt)
         {
-            if (!IsSelf(evt.Player)) return;
+            if (evt.Player != _playerController) return;
             if (evt.DropItem == null) return;
 
             _touchingItems.Remove(evt.DropItem);
@@ -57,7 +55,6 @@ namespace OneTripMover.Views.Player
 
         private void OnPickup(PlayerPickupInputEvent evt)
         {
-            if (!IsSelf(evt.Player)) return;
             if (_cargoTower == null) return;
 
             var dropItem = GetAnyTouchingItem();

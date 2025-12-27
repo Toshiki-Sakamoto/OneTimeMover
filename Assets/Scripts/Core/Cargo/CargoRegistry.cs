@@ -19,6 +19,10 @@ namespace Core.Cargo
         public void Unregister(ICargo cargo)
         {
             _cargos.Remove(cargo.CargoId);
+            if (_topCargo == cargo)
+            {
+                _topCargo = null;
+            }
         }
 
         public void Clear()
@@ -28,5 +32,7 @@ namespace Core.Cargo
         }
 
         public ICargo GetTopCargo() => _topCargo;
+
+        public bool TryGet(CargoId cargoId, out ICargo cargo) => _cargos.TryGetValue(cargoId, out cargo);
     }
 }

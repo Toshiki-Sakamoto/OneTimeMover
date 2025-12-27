@@ -1,7 +1,5 @@
 using Core.Cargo;
 using OneTripMover.Master;
-using UnityEngine.AddressableAssets;
-using UnityEngine.SceneManagement;
 
 namespace Core.Stage
 {
@@ -14,8 +12,10 @@ namespace Core.Stage
         int InitCargoNum { get; }
         
         /// <summary>
-        /// 初期積荷マスター一覧を取得
-        /// </summary>
+        /// 初期積荷マスター一覧を取征E        /// </summary>
         ICargoMaster[] InitCargoMasters { get; }
+
+        Core.Adventure.AdvText IntroAdventure { get; }
+        Core.Adventure.AdvText ClearAdventure { get; }
     }
 }

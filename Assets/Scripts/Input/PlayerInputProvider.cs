@@ -1,92 +1,66 @@
-﻿using System;
 using Core.Common;
 using Core.Common.Messaging;
 using OneTripMover.Core.Player;
-using OneTripMover.Views.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace OneTripMover.Input
 {
     /// <summary>
-    /// プレイヤー入力処理
+    /// InputSystem_Actionsのイベントコールバック経由で入力をPublishする。
     /// </summary>
     public class PlayerInputProvider : MonoBehaviour
     {
-        [SerializeField] private InputActionReference _moveAction;
-        [SerializeField] private InputActionReference _balanceAction;
-        [SerializeField] private InputActionReference _pickupAction;
-
         private IPublisher<PlayerInputEvent> _playerInputEventPublisher;
         private IPublisher<PlayerPickupInputEvent> _pickupInputEventPublisher;
-        private IPlayerInputHandler _inputHandler;
-        private PlayerController _playerController;
-        private bool _inputEnabled = true;
+        private InputSystem_Actions _actions;
 
         [Inject]
         public void Construct(
             IPublisher<PlayerInputEvent> inputPublisher,
             IPublisher<PlayerPickupInputEvent> pickupInputPublisher,
-            ISubscriber<PlayerInputEnableEvent> inputEnableSubscriber)
+            InputSystem_Actions actions)
         {
             _playerInputEventPublisher = inputPublisher;
             _pickupInputEventPublisher = pickupInputPublisher;
-            inputEnableSubscriber.Subscribe(OnInputEnableChanged);
-        }
-
-        private void SetHandler(IPlayerInputHandler handler) =>
-            _inputHandler = handler;
-
-        private void Awake()
-        {
-            _playerController = GetComponent<PlayerController>();
+            _actions = actions;
         }
 
         private void OnEnable()
         {
-            _moveAction?.action.Enable();
-            _balanceAction?.action.Enable();
-            _pickupAction?.action.Enable();
+            if (_actions == null) return;
+            _actions.Player.Move.performed += OnMove;
+            _actions.Player.Move.canceled += OnMove;
+            _actions.Player.Balance.performed += OnBalance;
+            _actions.Player.Balance.canceled += OnBalance;
+            _actions.Player.Pick.performed += OnPick;
         }
 
-        private void Update()
+        private void OnDisable()
         {
-            if (!_inputEnabled) return;
-
-            Vector2? moveInput = null;
-            float? balanceInput = null;
-            bool isAnyInput = false;
-            var pickupPressed = _pickupAction != null && _pickupAction.action.triggered;
-            
-            if (_moveAction.action.IsPressed())
-            {
-                moveInput = _moveAction.action.ReadValue<Vector2>();
-                isAnyInput = true;
-            }
-            
-            if (_balanceAction != null && _balanceAction.action.triggered)
-            {
-                balanceInput = _balanceAction.action.ReadValue<Vector2>().x;
-                isAnyInput = true;
-            }
-
-            if (isAnyInput)
-            {
-                _playerInputEventPublisher.Publish(new PlayerInputEvent(moveInput ?? Vector2.zero, balanceInput ?? 0f));
-            }
-
-            if (pickupPressed && _playerController != null)
-            {
-                _pickupInputEventPublisher.Publish(new PlayerPickupInputEvent
-                {
-                    Player = _playerController
-                });
-            }
+            if (_actions == null) return;
+            _actions.Player.Move.performed -= OnMove;
+            _actions.Player.Move.canceled -= OnMove;
+            _actions.Player.Balance.performed -= OnBalance;
+            _actions.Player.Balance.canceled -= OnBalance;
+            _actions.Player.Pick.performed -= OnPick;
         }
 
-        private void OnInputEnableChanged(PlayerInputEnableEvent evt)
+        private void OnMove(InputAction.CallbackContext ctx)
         {
-            _inputEnabled = evt.Enabled;
+            var move = ctx.ReadValue<Vector2>();
+            _playerInputEventPublisher.Publish(new PlayerInputEvent(move, 0f));
+        }
+
+        private void OnBalance(InputAction.CallbackContext ctx)
+        {
+            var balance = ctx.ReadValue<Vector2>().x;
+            _playerInputEventPublisher.Publish(new PlayerInputEvent(Vector2.zero, balance));
+        }
+
+        private void OnPick(InputAction.CallbackContext ctx)
+        {
+            _pickupInputEventPublisher.Publish(new PlayerPickupInputEvent());
         }
     }
 }
