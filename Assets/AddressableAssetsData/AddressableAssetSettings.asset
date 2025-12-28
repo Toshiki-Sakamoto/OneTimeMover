@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: f7f0890c1923cd5459efe4cd85c8981c
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: 4091aa4e363de4a880a7f3e126ab49ea
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -106,6 +106,7 @@ MonoBehaviour:
     - Define
     - Stage
     - CargoView
+    - Player
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 2e9cde18c1393c24d9e7e5d8fe1ca1cf, type: 2}

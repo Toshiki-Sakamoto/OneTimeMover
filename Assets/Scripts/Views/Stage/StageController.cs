@@ -11,7 +11,7 @@ namespace OneTripMover.Views.Stage
     public class StageController : MonoBehaviour
     {
         [SerializeField] private StageId _stageId = new (1);
-
+        
         private StageIntro _stageIntro;
         private IStageUseCase _stageUseCase;
         

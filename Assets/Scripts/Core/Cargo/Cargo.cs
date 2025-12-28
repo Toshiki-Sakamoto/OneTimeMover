@@ -1,6 +1,7 @@
 ﻿using Core.Common;
 using OneTripMover.Core;
 using OneTripMover.Core.Entity;
+using OneTripMover.Master;
 using UnityEngine;
 
 namespace Core.Cargo
@@ -12,14 +13,14 @@ namespace Core.Cargo
     {
         public IEntityId Id { get; private set; }
         
-        public CargoId CargoId { get; private set; }
+        public MasterId<ICargoMaster> MasterId { get; set; }
 
+        public bool IsOneMoreBonus { get; set; }
 
-        public Cargo(CargoId cargoId) 
+        public Cargo()
         {
-            CargoId = cargoId;
         }
-        
+
         public void AssignId(IEntityId id) =>
             Id = id;
     }

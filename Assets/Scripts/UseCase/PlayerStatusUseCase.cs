@@ -7,17 +7,12 @@ namespace OneTripMover.UseCase
     public class PlayerStatusUseCase : IPlayerStatusUseCase
     {
         private readonly IPlayerStatusRepository _repository;
+        private readonly IPlayerMasterRegistry _masterRegistry;
 
         public PlayerStatusUseCase()
         {
             _repository = ServiceLocator.Resolve<IPlayerStatusRepository>();
-
-            // 初期値はPlayerMasterから取得できるものがあればそれを設定
-            var playerMaster = ServiceLocator.Resolve<IPlayerMasterRegistry>().GetMaster();
-            if (playerMaster != null)
-            {
-                _repository.SetLimitAngle(playerMaster.LimitAngleDeg);
-            }
+            _masterRegistry = ServiceLocator.Resolve<IPlayerMasterRegistry>();
         }
 
         public void SetLimitAngle(float angleDeg)
@@ -32,7 +27,20 @@ namespace OneTripMover.UseCase
 
         public float GetLimitAngle()
         {
-            return _repository.GetLimitAngle();
+            var current = _repository.GetLimitAngle();
+            if (current <= 0f)
+            {
+                InitializeFromMaster();
+                current = _repository.GetLimitAngle();
+            }
+            return current;
+        }
+
+        public void InitializeFromMaster()
+        {
+            var playerMaster = _masterRegistry.GetMaster();
+            var initial = playerMaster?.LimitAngleDeg ?? 45f;
+            _repository.SetLimitAngle(initial);
         }
     }
 }

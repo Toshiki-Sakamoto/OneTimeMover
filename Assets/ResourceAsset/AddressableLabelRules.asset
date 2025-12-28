@@ -33,3 +33,8 @@ MonoBehaviour:
     includeSubfolders: 1
     groupName: Cargo
     createGroupIfMissing: 1
+  - target: {fileID: 102900000, guid: 6cb2fc42e7aa07544bbd3aa37070fe61, type: 3}
+    label: Player
+    includeSubfolders: 1
+    groupName: Master
+    createGroupIfMissing: 1

@@ -100,6 +100,9 @@ MonoBehaviour:
   _cargoRoot: {fileID: 7005264154168537335}
   _cargoVisualRoot: {fileID: 0}
   _isPreview: 0
+  _groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   _previewComponents:
   - rid: 5308654931921600867
   references:

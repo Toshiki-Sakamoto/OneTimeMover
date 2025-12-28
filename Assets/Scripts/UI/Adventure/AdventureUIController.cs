@@ -84,6 +84,15 @@ namespace UI.Adventure
             Play(array, evt.ViewKey ?? evt.Script.ViewKey, evt.OnFinished);
         }
 
+        public void OnSkip()
+        {
+            if (!_isPlaying) return;
+            _currentView?.SkipAnimation();
+            _currentView?.ExitCurrentItem();
+            _index = _lines?.Length ?? 0;
+            Finish();
+        }
+
         private void ShowCurrent()
         {
             if (_currentView == null || _lines == null || _index >= _lines.Length) return;
@@ -92,6 +101,7 @@ namespace UI.Adventure
 
         private void Finish()
         {
+            _currentView.Complete();
             _isPlaying = false;
             _onFinished?.Invoke();
             _onFinished = null;

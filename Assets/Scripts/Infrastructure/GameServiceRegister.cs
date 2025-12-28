@@ -1,17 +1,23 @@
+using Core.Adventure;
 using Core.Cargo;
 using Core.Common;
-using Core.Adventure;
 using Core.Game;
-using Core.Phase;
-using Core.Stage;
 using Core.Money;
+using Core.Phase;
+using Core.Player;
+using Core.Stage;
 using Master;
 using OneTripMover.Asset;
 using OneTripMover.Core;
+using OneTripMover.Core.Entity;
 using OneTripMover.Master;
 using OneTripMover.UseCase;
-using UI.GameOver;
+using OneTripMover.Views.Stage;
 using UI.Adventure;
+using UI.Bonus;
+using UI.GameOver;
+using UI.Money;
+using Views.Cargo;
 
 namespace OneTripMover.Infrastructure
 {
@@ -35,15 +41,13 @@ namespace OneTripMover.Infrastructure
             RegisterSingleton<IPhaseService<GamePhase>, GamePhaseService>();
             RegisterSingleton<IGamePhaseEntryExecutor, GamePhaseEntryExecutor>();
             RegisterSingleton<IGamePhaseInitializeExecutor, GameGamePhaseInitializeExecutor>();
-         //   RegisterSingleton<IPhaseStartExecutor, GamePhaseStartExecutor>();
             RegisterSingleton<IGamePhasePlayExecutor, GameGamePhasePlayExecutor>();
-         //   RegisterSingleton<IPhasePauseExecutor, GamePhasePauseExecutor>();
-         //   RegisterSingleton<IPhaseOverExecutor, GamePhaseOverExecutor>();
-         //   RegisterSingleton<IPhaseClearExecutor, GamePhaseClearExecutor>();
+            RegisterSingleton<IGamePhaseClearExecutor, GameGamePhaseClearExecutor>();
          
             RegisterSingleton<IGamePhaseEntryHandler, GamePhaseEntryHandler>();
             RegisterSingleton<IGamePhaseInitializeHandler, GamePhaseInitializeHandler>();
             RegisterSingleton<IGamePhasePlayHandler, GamePhasePlayHandler>();
+            RegisterSingleton<IGamePhaseClearHandler, GamePhaseClearHandler>();
             RegisterSingleton<ICargoFactory, CargoFactory>();
             
             RegisterSingleton<IStageUseCase, StageUseCase>();
@@ -54,17 +58,42 @@ namespace OneTripMover.Infrastructure
             RegisterSingleton<IMoneyUseCase, MoneyUseCase>();
             RegisterSingleton<IMoneyEventHandler, MoneyEventHandler>();
             RegisterSingleton<ICargoEventHandler, CargoEventHandler>();
+            RegisterSingleton<BonusStatusEventHandler, BonusStatusEventHandler>();
             RegisterSingleton<IGameOverUIController, GameOverUIController>();
             RegisterSingleton<GameOverUIViewEventHandler, GameOverUIViewEventHandler>();
             RegisterSingleton<IAdventureService, AdventureService>();
             RegisterSingleton<AdventureUIController, AdventureUIController>();
             RegisterSingleton<AdventureUIEventHandler, AdventureUIEventHandler>();
+            RegisterSingleton<BonusUIController, BonusUIController>();
+            RegisterSingleton<BonusUIEventHandler, BonusUIEventHandler>();
+            RegisterSingleton<MoneyAnimationUIController, MoneyAnimationUIController>();
+            RegisterSingleton<MoneyAnimationUIEventHandler, MoneyAnimationUIEventHandler>();
+            RegisterSingleton<MoneyUIController, MoneyUIController>();
+            RegisterSingleton<MoneyUIEventHandler, MoneyUIEventHandler>();
+            RegisterSingleton<UI.Bonus.BonusPresentationFinishedEvent, UI.Bonus.BonusPresentationFinishedEvent>();
             RegisterSingleton<InputSystem_Actions, InputSystem_Actions>();
             RegisterSingleton<OneTripMover.Input.IInputContextUseCase, OneTripMover.Input.InputContextUseCase>();
+            RegisterSingleton<IPlayerStatusRepository, PlayerStatusRepository>();
+            RegisterSingleton<IPlayerStatusUseCase, PlayerStatusUseCase>();
+            RegisterSingleton<IPlayerMasterRegistry, PlayerMasterRegistry>();
+            RegisterSingleton<SettleViewEventHandler, SettleViewEventHandler>();
+            RegisterSingleton<SettlementController, SettlementController>();
+            RegisterSingleton<SettlementRewardEventHandler, SettlementRewardEventHandler>();
+            RegisterSingleton<ICargoViewRegistry, CargoViewRegistry>();
 
-            // ヒエラルキー上のUIコンポーネントを検索登録
+            RegisterSingleton<IIdGeneratorStateRepository, IdGeneratorStateRepository>();
+            RegisterSingleton<IIdGeneratorRegistry, IdGeneratorRegistry>();
+            RegisterSingleton<IIdGenerator<Cargo>, TypeSequentialIdGenerator<Cargo>>();
+            RegisterSingleton<IEntityForIdFactory<Cargo, Cargo>, EntityForIdFactory<Cargo, Cargo>>();
+
             RegisterComponentInHierarchy<GameOverUIView>();
             RegisterComponentInHierarchy<IAdventureUIView>();
+            RegisterComponentInHierarchy<SettleController>();
+            RegisterComponentInHierarchy<BonusUIView>();
+            RegisterComponentInHierarchy<MoneyAnimationUIView>();
+            RegisterComponentInHierarchy<MoneyUIView>();
+            RegisterComponentInHierarchy<SettlementController>();
+            RegisterComponentInHierarchy<GoalController>();
         }
     }
 }

@@ -7,12 +7,12 @@ namespace OneTripMover.UseCase
 {
     public class CargoEventHandler : ICargoEventHandler
     {
-        private ICargoRegistry _cargoRegistry;
+        private ICargoUseCase _cargoUseCase;
 
         [Inject]
         public void Construct()
         {
-            _cargoRegistry = ServiceLocator.Resolve<ICargoRegistry>();
+            _cargoUseCase = ServiceLocator.Resolve<ICargoUseCase>();
             var detachedSubscriber = ServiceLocator.Resolve<ISubscriber<CargoViewDetachedEvent>>();
             detachedSubscriber.Subscribe(OnCargoDetached);
         }
@@ -20,8 +20,7 @@ namespace OneTripMover.UseCase
         private void OnCargoDetached(CargoViewDetachedEvent evt)
         {
             if (evt == null) return;
-            if (!_cargoRegistry.TryGet(evt.CargoId, out var cargo)) return;
-            _cargoRegistry.Unregister(cargo);
+            _cargoUseCase.RemoveCargo(evt.CargoId);
         }
     }
 }

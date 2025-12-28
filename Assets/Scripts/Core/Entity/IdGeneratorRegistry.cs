@@ -8,12 +8,11 @@ namespace OneTripMover.Core.Entity
     public class IdGeneratorRegistry : IIdGeneratorRegistry
     {
         private readonly ConcurrentDictionary<Type, long> _idMap = new();
-        private IIdGeneratorStateRepository _stateRepository;
+        private readonly IIdGeneratorStateRepository _stateRepository;
 
-        [Inject]
-        public void Construct(IIdGeneratorStateRepository stateRepository)
+        public IdGeneratorRegistry()
         {
-            _stateRepository = stateRepository;
+            _stateRepository = ServiceLocator.Resolve<IIdGeneratorStateRepository>();
             RestoreState();
         }
 

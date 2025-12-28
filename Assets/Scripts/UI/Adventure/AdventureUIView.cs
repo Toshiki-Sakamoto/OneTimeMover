@@ -20,6 +20,8 @@ namespace UI.Adventure
 
         public void ShowLine(string text, Action onCompleted)
         {
+            gameObject.SetActive(true);
+            
             _onCompleted = onCompleted;
             if (_entriesRoot == null || _entryPrefab == null)
             {
@@ -67,6 +69,7 @@ namespace UI.Adventure
             }
             _currentItem = null;
             _previousItem = null;
+            gameObject.SetActive(false);
         }
 
         private void FinishImmediate(string text)
@@ -90,14 +93,19 @@ namespace UI.Adventure
             Complete();
         }
 
-        private void Complete()
+        public void Complete()
         {
+            gameObject.SetActive(false);
         }
 
 
         private void OnItemCompleted()
         {
-            Complete();
+        }
+
+        private void Awake()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

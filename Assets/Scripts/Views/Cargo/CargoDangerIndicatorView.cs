@@ -25,11 +25,13 @@ namespace Views.Cargo
         [SerializeField] private TMP_Text _rightText;
         [SerializeField] private float _baseTiltDeg = 20f;
         [SerializeField] private float _moveAmplitude = 10f;
+        [SerializeField] private float _thresholdDeg = 10f;
         [SerializeField] private List<DangerLevel> _levels = new();
 
         private Vector3 _leftBasePos;
         private Vector3 _rightBasePos;
         private float _currentAngleAbs;
+        private float _currentLimit;
         private int _currentSide; // -1 left, 1 right, 0 none
 
         private void Awake()
@@ -42,10 +44,11 @@ namespace Views.Cargo
         /// <summary>
         /// 荷物の傾き角度を渡す（+右、-左）。角度に応じて表示・アニメ更新。
         /// </summary>
-        public void SetAngle(float angleDeg)
+        public void SetAngle(float limitAngleDeg, float currentAngleDeg)
         {
-            _currentAngleAbs = Mathf.Abs(angleDeg);
-            _currentSide = Mathf.Abs(angleDeg) < 10f ? 0 : (angleDeg > 0 ? 1 : -1);
+            _currentLimit = limitAngleDeg;
+            _currentAngleAbs = Mathf.Abs(currentAngleDeg);
+            _currentSide = _currentAngleAbs < _thresholdDeg ? 0 : (currentAngleDeg > 0 ? 1 : -1);
             UpdateVisual();
         }
 
@@ -63,7 +66,7 @@ namespace Views.Cargo
                 return;
             }
 
-            var level = ResolveLevel(_currentAngleAbs);
+            var level = ResolveLevel(_currentLimit, _currentAngleAbs);
             var target = _currentSide > 0 ? _rightIndicator : _leftIndicator;
             var text = _currentSide > 0 ? _rightText : _leftText;
 
@@ -76,14 +79,14 @@ namespace Views.Cargo
             SetColor(_currentSide > 0 ? _leftText : _rightText, Color.clear);
         }
 
-        private DangerLevel ResolveLevel(float angleAbs)
+        private DangerLevel ResolveLevel(float limitAngle, float angleAbs)
         {
             DangerLevel result = null;
             foreach (var lvl in _levels)
             {
-                if (angleAbs >= lvl.thresholdDeg)
+                if (angleAbs >= Mathf.Max(0f, limitAngle - lvl.thresholdDeg))
                 {
-                    if (result == null || lvl.thresholdDeg > result.thresholdDeg)
+                    if (result == null || lvl.thresholdDeg < result.thresholdDeg)
                     {
                         result = lvl;
                     }
@@ -94,7 +97,7 @@ namespace Views.Cargo
 
         private void AnimateIndicator()
         {
-            var level = ResolveLevel(_currentAngleAbs);
+            var level = ResolveLevel(_currentLimit, _currentAngleAbs);
             var dirDeg = _currentSide > 0 ? _baseTiltDeg : -_baseTiltDeg;
             var dir = Quaternion.Euler(0f, 0f, dirDeg) * Vector2.right;
             var offset = dir.normalized * (_moveAmplitude * Mathf.Sin(Time.time * level.moveSpeed));

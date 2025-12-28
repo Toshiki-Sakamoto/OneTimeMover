@@ -10,6 +10,17 @@ namespace Core.Stage
         void SetCurrentStage(StageId stageId);
         
         StageId GetCurrentStage();
+
+        /// <summary>
+        /// ボーナス状態
+        /// </summary>
+        bool HasPerfectBonus();
+        bool HasOneMoreBonus();
+        void SetPerfectBonus(bool enabled);
+        void SetOneMoreBonus(bool enabled);
+        void GainOneMoreBonus();
+        void LosePerfectBonus();
+        void LoseOneMoreBonus();
         
         /// <summary>
         /// 初期荷物数の取得
@@ -20,5 +31,10 @@ namespace Core.Stage
         /// 現在のステージからランダムに荷物を取得する
         /// </summary>
         ICargoMaster GetRandomCargoMaster();
+        
+        /// <summary>
+        /// 現在のステージからランダムにドロップ用荷物を取得する
+        /// </summary>
+        ICargoMaster GetRandomDropCargoMaster();
     }
 }

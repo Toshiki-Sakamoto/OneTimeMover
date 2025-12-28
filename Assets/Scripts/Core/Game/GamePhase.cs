@@ -8,6 +8,7 @@
         Play,
         Pause,
         GameOver,
-        Clear
+        Clear,
+        Result,
     }
 }

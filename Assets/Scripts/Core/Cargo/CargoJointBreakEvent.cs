@@ -1,9 +1,10 @@
 ﻿using OneTripMover.Core;
+using OneTripMover.Core.Entity;
 
 namespace Core.Cargo
 {
     public class CargoJointBreakEvent
     {
-        public CargoId CargoId { get; }
+        public IEntityId CargoId { get; }
     }
 }

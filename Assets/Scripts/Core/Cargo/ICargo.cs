@@ -1,10 +1,12 @@
 ﻿using OneTripMover.Core;
 using OneTripMover.Core.Entity;
+using OneTripMover.Master;
 
 namespace Core.Cargo
 {
     public interface ICargo : IEntity
     {
-        CargoId CargoId { get; }
+        MasterId<ICargoMaster> MasterId { get; }
+        bool IsOneMoreBonus { get; }
     }
 }

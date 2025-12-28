@@ -61,8 +61,10 @@ namespace OneTripMover.Views.Player
             if (dropItem == null || dropItem.CargoView == null) return;
 
             var view = dropItem.CargoView;
-            view.ChangeNormal(); // Preview状態を動的へ戻す
-            _cargoTower.AttachExistingCargo(view);
+            _cargoTower.AttachExistingCargo(view, true);
+            
+            // viewは削除
+            GameObject.Destroy(view.gameObject);
 
             dropItem.OnPickedUp();
             _touchingItems.Remove(dropItem);

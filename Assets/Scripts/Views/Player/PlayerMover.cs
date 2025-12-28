@@ -2,6 +2,7 @@
 using Core.Common;
 using Core.Common.Messaging;
 using Core.Cargo;
+using Core.Player;
 using OneTripMover.Core.Player;
 using OneTripMover.Input;
 using UnityEngine;
@@ -19,11 +20,13 @@ namespace OneTripMover.Views.Player
         
         private Rigidbody2D _anchorBody;
         private ICargoRegistry _cargoRegistry;
+        private IPlayerMasterRegistry _playerMasterRegistry;
 
         [Inject]
         public void Construct()
         {
             _cargoRegistry = ServiceLocator.Resolve<ICargoRegistry>();
+            _playerMasterRegistry = ServiceLocator.Resolve<IPlayerMasterRegistry>();
         }
 
         public void SetMovementInput(Vector2 input)
@@ -44,6 +47,13 @@ namespace OneTripMover.Views.Player
         private void Awake()
         {
             _anchorBody = GetComponent<Rigidbody2D>();
+        }
+
+        public void ApplyMasterSettings(IPlayerMaster master)
+        {
+            if (master == null) return;
+            _moveForce = master.MoveForce;
+            _maxSpeed = master.MaxMoveSpeed;
         }
     }
 }

@@ -7,12 +7,11 @@ namespace OneTripMover.Core.Entity
         where TEntity : IEntity
         where T : IEntity, new()
     {
-        private IIdGenerator<TEntity> _idGenerator;
+        private readonly IIdGenerator<TEntity> _idGenerator;
         
-        [Inject] 
-        public void Construct(IIdGenerator<TEntity> idGenerator)
+        public EntityForIdFactory()
         {
-            _idGenerator = idGenerator;
+            _idGenerator = ServiceLocator.Resolve<IIdGenerator<TEntity>>();
         }
 
         public T Create()

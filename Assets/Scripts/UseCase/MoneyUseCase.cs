@@ -18,7 +18,7 @@ namespace OneTripMover.UseCase
             _depletedPublisher = ServiceLocator.Resolve<IPublisher<MoneyDepletedEvent>>();
         }
 
-        public void SetMoney(int amount) => ApplyChange(amount);
+        public void SetMoney(int amount) => ApplyChange(amount, true);
 
         public void AddMoney(int amount) => ApplyChange(_repository.GetMoney() + amount);
 
@@ -26,7 +26,7 @@ namespace OneTripMover.UseCase
 
         public int GetMoney() => _repository.GetMoney();
 
-        private void ApplyChange(int next)
+        private void ApplyChange(int next, bool immediately = false)
         {
             var prev = _repository.GetMoney();
 
@@ -34,7 +34,8 @@ namespace OneTripMover.UseCase
             _changedPublisher.Publish(new MoneyChangedEvent
             {
                 Previous = prev,
-                Current = next
+                Current = next,
+                Immediately = immediately
             });
 
             if (next <= 0 && prev > 0)

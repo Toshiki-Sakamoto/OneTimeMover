@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Core.Common;
 using Core.Stage;
+using Core.Player;
 using Master;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -15,15 +16,18 @@ namespace OneTripMover.Master
             var cargoRegistry = ServiceLocator.Resolve<ICargoMasterRegistry>();
             var stageRegistry = ServiceLocator.Resolve<IStageMasterRegistry>();
             var defineRegistry = ServiceLocator.Resolve<IDefineMasterRegistry>();
+            var playerRegistry = ServiceLocator.Resolve<IPlayerMasterRegistry>();
 
             cargoRegistry.Clear();
             stageRegistry.Clear();
             defineRegistry.Clear();
+            playerRegistry.Clear();
 
             await Task.WhenAll(
                 LoadByLabel("Cargo", cargoRegistry),
                 LoadByLabel("Stage", stageRegistry),
-                LoadByLabel("Define", defineRegistry)
+                LoadByLabel("Define", defineRegistry),
+                LoadByLabel("Player", playerRegistry)
             );
             
             Debug.Log($"[MasterData] Loaded.");

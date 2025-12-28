@@ -15,6 +15,8 @@ namespace OneTripMover.Views.Player
         [SerializeField] private PlayerCargoTowerController _cargoStackTower;
 
         public PlayerCargoTowerController CargoStackTower => _cargoStackTower;
+        public PlayerMover PlayerMover => _playerMover;
+        
         public CancellationToken CancellationToken { get; private set; }
 
         private void Awake()

@@ -21,6 +21,17 @@ namespace Views.Cargo
         private IPublisher<CargoDropItemTouchOutedEvent> _touchOutedPublisher;
 
         public CargoView CargoView => _cargoView;
+        
+        /// <summary>
+        /// 荷物をアタッチする
+        /// </summary>
+        public void AttachCargoView(CargoView cargoView)
+        {
+            _cargoView = cargoView;
+            
+            _cargoView.transform.SetParent(_cargoRoot, false);
+            _cargoView.ChangePreview();
+        }
 
         private void ChangeState(bool triggered)
         {
@@ -41,11 +52,6 @@ namespace Views.Cargo
                 _collider2d.isTrigger = true;
             }
             
-            if (_cargoView == null && _cargoRoot != null)
-            {
-                _cargoView = _cargoRoot.GetComponentInChildren<CargoView>();
-            }
-
             if (_cargoView != null)
             {
                 _cargoView.ChangePreview();

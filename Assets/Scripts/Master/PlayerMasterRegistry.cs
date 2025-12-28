@@ -19,5 +19,12 @@ namespace OneTripMover.Master
         }
 
         public IPlayerMaster GetMaster() => _master;
+
+        public bool TryGetValue(MasterId<IPlayerMaster> id, out IPlayerMaster master)
+        {
+            // 単一マスター想定のため、存在すれば常に返す
+            master = _master;
+            return master != null;
+        }
     }
 }

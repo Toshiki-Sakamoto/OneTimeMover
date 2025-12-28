@@ -1,7 +1,7 @@
-﻿namespace Core.Cargo
+namespace Core.Cargo
 {
     public interface ICargoFactory
     {
-        ICargo Create(ICargoMaster master);
+        ICargo Create(ICargoMaster master, bool isOneMoreBonus = false);
     }
 }

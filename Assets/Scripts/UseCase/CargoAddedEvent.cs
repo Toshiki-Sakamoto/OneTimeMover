@@ -8,5 +8,6 @@ namespace OneTripMover.UseCase
     public class CargoAddedEvent
     {
         public ICargo Cargo;
+        public bool IsOneMoreCargo;
     }
 }

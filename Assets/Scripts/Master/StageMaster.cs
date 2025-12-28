@@ -22,6 +22,7 @@ namespace Master
         [SerializeField, HideInInspector] private string _sceneName;
         [SerializeField] private int _initCargoNum = 3;
         [SerializeField] private CargoMaster[] _initCargoMasters;
+        [SerializeField] private CargoMaster[] _dropCargoMasters;
         [SerializeField] private AdvText _introAdventure;
         [SerializeField] private AdvText _clearAdventure;
 
@@ -30,6 +31,7 @@ namespace Master
         public int InitCargoNum => _initCargoNum;
 
         public ICargoMaster[] InitCargoMasters => _initCargoMasters;
+        public ICargoMaster[] DropCargoMasters => _dropCargoMasters;
         public AdvText IntroAdventure => _introAdventure;
         public AdvText ClearAdventure => _clearAdventure;
 

@@ -22,4 +22,5 @@ MonoBehaviour:
     m_EditorAssetChanged: 1
   _cargoId:
     _value: 1
-  _mass: 5
+  _cost:
+    _amount: 1000

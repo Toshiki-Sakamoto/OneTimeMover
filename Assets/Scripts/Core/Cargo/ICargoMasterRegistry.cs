@@ -7,8 +7,5 @@ namespace OneTripMover.Master
 {
     public interface ICargoMasterRegistry : IMasterDataRegistry<ICargoMaster>
     {
-        bool TryGetByCargoId(CargoId cargoId, out ICargoMaster cargoMaster);
-        
-        IEnumerable<ICargoMaster> GetAllCargoMasters();
     }
 }

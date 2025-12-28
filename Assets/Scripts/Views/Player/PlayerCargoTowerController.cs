@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 using Core.Cargo;
 using Core.Common;
 using Core.Common.Messaging;
+using Core.Game;
+using Core.Player;
+using Core.Stage;
 using OneTripMover.Asset;
+using OneTripMover.Core.Entity;
 using OneTripMover.Master;
 using UnityEngine;
 using Views.Cargo;
@@ -21,24 +25,27 @@ namespace OneTripMover.Views.Player
         [SerializeField] private Transform _cargoTowerRoot;
         [SerializeField] private float _gap = 0f;
         [SerializeField] private float _movementBalanceAssist = 1.5f;
-        [SerializeField] private float _collapseAngleDeg = 45f;
         [SerializeField] private float _dangerMarginDeg = 10f;
         [SerializeField] private CargoDangerIndicatorView _dangerIndicator;
+        [SerializeField] private float _topBreakCooldownSeconds = 0.5f;
         
         private List<IAssetLoadHandle<CargoView>> _cargoViews = new ();
-        private readonly List<CargoView> _cargoViewRefs = new();
         private IAssetLoader _assetLoader;
-        private CancellationToken _cancellationToken;
         private FixedJoint2D _joint;
         private IPublisher<CargoJointViewBreakEvent> _jointBreakPublisher;
         private IPublisher<CargoTowerDangerLeanEvent> _dangerPublisher;
         private IPublisher<CargoViewDetachedEvent> _detachedPublisher;
         private IPublisher<CargoViewGroundHitEvent> _groundHitPublisher;
         private IPublisher<CargoTowerDangerClearedEvent> _dangerClearedPublisher;
+        private IPublisher<OneMoreBonusAcquiredEvent> _oneMoreBonusAcquiredPublisher;
+        private IPlayerStatusUseCase _playerStatusUseCase;
         private PlayerController _playerController;
         private bool _isInDanger;
-        
+        private float _topBreakCooldownUntil;
+        private ICargoViewRegistry _cargoViewRegistry;
+
         public CargoView TopCargoView { get; private set; }
+        public IReadOnlyList<CargoView> CargoViews => _cargoViewRegistry?.GetCurrentViews();
 
         [Inject]
         public void Construct()
@@ -49,6 +56,9 @@ namespace OneTripMover.Views.Player
             _detachedPublisher = ServiceLocator.Resolve<IPublisher<CargoViewDetachedEvent>>();
             _groundHitPublisher = ServiceLocator.Resolve<IPublisher<CargoViewGroundHitEvent>>();
             _dangerClearedPublisher = ServiceLocator.Resolve<IPublisher<CargoTowerDangerClearedEvent>>();
+            _oneMoreBonusAcquiredPublisher = ServiceLocator.Resolve<IPublisher<OneMoreBonusAcquiredEvent>>();
+            _playerStatusUseCase = ServiceLocator.Resolve<IPlayerStatusUseCase>();
+            _cargoViewRegistry = ServiceLocator.Resolve<ICargoViewRegistry>();
         }
 
         private void Awake()
@@ -60,10 +70,9 @@ namespace OneTripMover.Views.Player
         
         public void SetCancellationToken(CancellationToken cancellationToken)
         {
-            _cancellationToken = cancellationToken;
         }
         
-        public void AddCargoView(ICargoMaster cargoMaster)
+        public void AddCargoView(IEntityId cargoId, ICargoMaster cargoMaster)
         {
             var handle = _assetLoader.LoadInstantiate<CargoView>(cargoMaster.CargoView, _cargoTowerRoot, false);
             if (handle?.Asset == null) return;
@@ -71,35 +80,33 @@ namespace OneTripMover.Views.Player
             var view = handle.Asset;
             view.SetJointBreakHandler(this);
             view.SetGroundHitHandler(this);
+            view.SetCargoId(cargoId);
+            view.SetMasterId(cargoMaster.Id);
             
             PositionOnTop(view);
             ConnectJoint(view);
 
             _cargoViews.Add(handle);
-            RegisterCargoView(view);
-            TopCargoView = view;
+            _cargoViewRegistry?.AddCurrent(view);
+            TopCargoView = _cargoViewRegistry?.GetTopCurrentView() ?? view;
         }
 
-        public void AttachExistingCargo(CargoView view)
+        public void AttachExistingCargo(CargoView view, bool isOneMoreCargo)
         {
             if (view == null) return;
-
-            view.SetJointBreakHandler(this);
-            view.SetGroundHitHandler(this);
-            view.ChangeNormal();
-            view.transform.SetParent(_cargoTowerRoot, false);
-            view.transform.localRotation = Quaternion.identity;
-
-            PositionOnTop(view);
-            ConnectJoint(view);
-
-            RegisterCargoView(view);
-            TopCargoView = view;
+            if (isOneMoreCargo)
+            {
+                _oneMoreBonusAcquiredPublisher?.Publish(new OneMoreBonusAcquiredEvent { CargoMasterId = view.MasterId });
+            }
+            _cargoViewRegistry?.AddCurrent(view);
+            TopCargoView = _cargoViewRegistry?.GetTopCurrentView() ?? view;
         }
         
         public void SetAllCargoBreakAction(JointBreakAction2D breakAction)
         {
-            foreach (var view in _cargoViewRefs)
+            var views = _cargoViewRegistry?.GetCurrentViews();
+            if (views == null) return;
+            foreach (var view in views)
             {
                 if (view == null) continue;
 
@@ -121,13 +128,18 @@ namespace OneTripMover.Views.Player
 
         public void OnCargoJointBreak(CargoView cargoView)
         {
+            if (Time.time < _topBreakCooldownUntil) return;
+            
+            Debug.Log($"Cargo Joint Broken: {cargoView.Id} {Time.time}");
+
             _jointBreakPublisher.Publish(new CargoJointViewBreakEvent { CargoView = cargoView });
-            _detachedPublisher.Publish(new CargoViewDetachedEvent
-            {
-                CargoId = cargoView.Id,
-                CargoView = cargoView
-            });
-            RemoveCargoView(cargoView);
+            _detachedPublisher.Publish(new CargoViewDetachedEvent { CargoId = cargoView.Id, });
+            _cargoViewRegistry?.RemoveCurrent(cargoView);
+            _cargoViewRegistry?.AddDropped(cargoView);
+
+            TopCargoView = _cargoViewRegistry?.GetTopCurrentView();
+
+            _topBreakCooldownUntil = Time.time + _topBreakCooldownSeconds;
         }
         
         public void OnCargoGroundHit(CargoView cargoView, Collision2D collision)
@@ -188,18 +200,20 @@ namespace OneTripMover.Views.Player
                 return;
             }
 
-            var dir = (Vector2)(TopCargoView.transform.position - (Vector3)_anchorRigidbody.position);
-            if (dir == Vector2.zero)
+            var limitAngle = _playerStatusUseCase.GetLimitAngle();
+            
+            var angle = Vector2.SignedAngle(Vector2.up, TopCargoView.transform.up);
+            var angleAbs = Mathf.Abs(angle);
+            if (angleAbs <= 0.01f)
             {
-                _dangerIndicator.SetAngle(0);
+                _dangerIndicator?.SetAngle(limitAngle, 0);
                 return;
             }
 
-            var angle = Mathf.Abs(Vector2.SignedAngle(Vector2.up, dir));
-            _dangerIndicator.SetAngle(angle);
+            _dangerIndicator?.SetAngle(limitAngle, angle);
             
-            var dangerThreshold = Mathf.Max(0f, _collapseAngleDeg - _dangerMarginDeg);
-            var inDanger = angle >= dangerThreshold && angle < _collapseAngleDeg;
+            var dangerThreshold = Mathf.Max(0f, limitAngle - _dangerMarginDeg);
+            var inDanger = angleAbs >= dangerThreshold && angleAbs < limitAngle;
 
             if (inDanger && !_isInDanger)
             {
@@ -207,8 +221,8 @@ namespace OneTripMover.Views.Player
                 _dangerPublisher?.Publish(new CargoTowerDangerLeanEvent
                 {
                     Player = _playerController,
-                    CurrentAngleDeg = angle,
-                    CollapseAngleDeg = _collapseAngleDeg,
+                    CurrentAngleDeg = angleAbs,
+                    CollapseAngleDeg = limitAngle,
                     DangerMarginDeg = _dangerMarginDeg
                 });
             }
@@ -218,8 +232,8 @@ namespace OneTripMover.Views.Player
                 _dangerClearedPublisher?.Publish(new CargoTowerDangerClearedEvent
                 {
                     Player = _playerController,
-                    CurrentAngleDeg = angle,
-                    CollapseAngleDeg = _collapseAngleDeg,
+                    CurrentAngleDeg = angleAbs,
+                    CollapseAngleDeg = limitAngle,
                     DangerMarginDeg = _dangerMarginDeg
                 });
             }
@@ -239,21 +253,49 @@ namespace OneTripMover.Views.Player
             return 1f + _movementBalanceAssist;
         }
 
-        private void RegisterCargoView(CargoView view)
-        {
-            if (view == null) return;
-            _cargoViewRefs.Add(view);
-        }
-
-        private void RemoveCargoView(CargoView view)
-        {
-            if (view == null) return;
-            _cargoViewRefs.Remove(view);
-            TopCargoView = _cargoViewRefs.Count > 0 ? _cargoViewRefs[^1] : null;
-        }
-
         private float GetTopY(GameObject go) =>
             go.transform.position.y + GetHeight(go) * 0.5f;
+
+        public void OnGoalCleared(GoalClearedEvent evt)
+        {
+            FreezeAllCargo();
+        }
+
+        private void FreezeAllCargo()
+        {
+            var views = _cargoViewRegistry?.GetCurrentViews();
+            if (views == null) return;
+            foreach (var view in views)
+            {
+                if (view == null) continue;
+                FreezeCargoView(view);
+            }
+
+            if (_anchorRigidbody != null)
+            {
+                _anchorRigidbody.linearVelocity = Vector2.zero;
+                _anchorRigidbody.angularVelocity = 0f;
+                _anchorRigidbody.bodyType = RigidbodyType2D.Static;
+            }
+        }
+
+        private void FreezeCargoView(CargoView view)
+        {
+            if (view == null) return;
+            var joint = view.GetComponent<FixedJoint2D>();
+            if (joint != null) joint.enabled = false;
+
+            var rb = view.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+                rb.bodyType = RigidbodyType2D.Static;
+            }
+
+            var col = view.GetComponent<Collider2D>();
+            if (col != null) col.enabled = false;
+        }
         
     }
 }

@@ -39,8 +39,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 852
     y: -1433
-    width: 474
-    height: 2255
+    width: 476
+    height: 2272
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1479,7 +1479,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 8.73
+      m_SerializableObject: 5
     m_Space: -1
   m_Property:
     name: MinSpeed

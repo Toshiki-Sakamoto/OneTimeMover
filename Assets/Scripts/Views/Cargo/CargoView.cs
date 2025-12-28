@@ -1,6 +1,9 @@
 using System;
 using Core.Attribute;
+using Core.Cargo;
 using OneTripMover.Core;
+using OneTripMover.Core.Entity;
+using OneTripMover.Master;
 using UnityEngine;
 
 namespace Views.Cargo
@@ -34,9 +37,17 @@ namespace Views.Cargo
         private Collider2D _collider2D;
         private Quaternion _initialCargoVisualRootRotation;
         
-        public CargoId Id { get; }
+        public IEntityId Id { get; private set; }
+        public MasterId<ICargoMaster> MasterId { get; private set; }
+        
         public bool IsPreview => _isPreview;
         private Collider2D Collider2D => _collider2D ??= GetComponent<Collider2D>();
+        
+        public void SetCargoId(IEntityId id) =>
+            Id = id;
+        
+        public void SetMasterId(MasterId<ICargoMaster> masterId) =>
+            MasterId = masterId;
         
         public void SetJointBreakHandler(ICargoJointBreakHandler handler)
         {

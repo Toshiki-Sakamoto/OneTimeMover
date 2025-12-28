@@ -4,5 +4,6 @@ namespace Core.Money
     {
         public int Previous;
         public int Current;
+        public bool Immediately;
     }
 }

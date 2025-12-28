@@ -12,11 +12,9 @@ namespace OneTripMover.Master
     public class CargoMaster : AddressableMasterData<ICargoMaster>, ICargoMaster
     {
         [SerializeField] private AssetReferenceGameObject _cargoView;
-        [SerializeField] private CargoId _cargoId;
         [SerializeField] private Money _cost;
         
         public AssetReferenceGameObject CargoView => _cargoView;
-        public CargoId CargoId => _cargoId;
         public Money Cost => _cost;
     }
 }

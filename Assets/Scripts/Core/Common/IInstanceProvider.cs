@@ -55,7 +55,7 @@ namespace Core.Common
             
             foreach (var gameObject in gameObjects)
             {
-                var component = gameObject.GetComponentInChildren(_componentType);
+                var component = gameObject.GetComponentInChildren(_componentType, true);
                 if (component)
                 {
                     return component;

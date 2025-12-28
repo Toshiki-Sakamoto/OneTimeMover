@@ -14,6 +14,9 @@ namespace UI.Adventure
             var advanceSub = ServiceLocator.Resolve<ISubscriber<OneTripMover.Input.AdventureAdvanceInputEvent>>();
             advanceSub.Subscribe(_ => _controller.OnAdvance());
 
+            var skipSub = ServiceLocator.Resolve<ISubscriber<OneTripMover.Input.AdventureSkipInputEvent>>();
+            skipSub.Subscribe(_ => _controller.OnSkip());
+
             var playSub = ServiceLocator.Resolve<ISubscriber<Core.Adventure.AdventurePlayEvent>>();
             playSub.Subscribe(_controller.OnPlayRequested);
 

@@ -1,4 +1,5 @@
 ﻿using OneTripMover.Core;
+using OneTripMover.Core.Entity;
 
 namespace Core.Cargo
 {
@@ -15,6 +16,6 @@ namespace Core.Cargo
         /// </summary>
         ICargo GetTopCargo();
 
-        bool TryGet(CargoId cargoId, out ICargo cargo);
+        bool TryGet(IEntityId cargoId, out ICargo cargo);
     }
 }

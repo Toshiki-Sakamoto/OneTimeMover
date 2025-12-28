@@ -10,5 +10,6 @@ namespace UI.Adventure
         void SkipAnimation();
         void ClearView();
         void ExitCurrentItem();
+        void Complete();
     }
 }

@@ -7,7 +7,6 @@ namespace Core.Cargo
     public interface ICargoMaster : IMasterData<ICargoMaster>
     {
         public AssetReferenceGameObject CargoView { get; }
-        public CargoId CargoId { get; }
         public Money.Money Cost { get; }
     }
 }
