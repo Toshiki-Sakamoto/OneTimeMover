@@ -1953,6 +1953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _trackController: {fileID: 715609101}
   _stageStartView: {fileID: 1604805771}
+  _introViewKey: truck
 --- !u!1 &1333027754
 GameObject:
   m_ObjectHideFlags: 0
@@ -5133,7 +5134,7 @@ MonoBehaviour:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
           ContributeToTotalDuration: 1
-          InitialDelay: 1
+          InitialDelay: 2
           CooldownDuration: 0
           InterruptsOnStop: 1
           NumberOfRepeats: 0

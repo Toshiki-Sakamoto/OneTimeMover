@@ -23,6 +23,7 @@ namespace OneTripMover.Views.Player
         [SerializeField] private float _movementBalanceAssist = 1.5f;
         [SerializeField] private float _collapseAngleDeg = 45f;
         [SerializeField] private float _dangerMarginDeg = 10f;
+        [SerializeField] private CargoDangerIndicatorView _dangerIndicator;
         
         private List<IAssetLoadHandle<CargoView>> _cargoViews = new ();
         private readonly List<CargoView> _cargoViewRefs = new();
@@ -188,9 +189,15 @@ namespace OneTripMover.Views.Player
             }
 
             var dir = (Vector2)(TopCargoView.transform.position - (Vector3)_anchorRigidbody.position);
-            if (dir == Vector2.zero) return;
+            if (dir == Vector2.zero)
+            {
+                _dangerIndicator.SetAngle(0);
+                return;
+            }
 
             var angle = Mathf.Abs(Vector2.SignedAngle(Vector2.up, dir));
+            _dangerIndicator.SetAngle(angle);
+            
             var dangerThreshold = Mathf.Max(0f, _collapseAngleDeg - _dangerMarginDeg);
             var inDanger = angle >= dangerThreshold && angle < _collapseAngleDeg;
 
@@ -247,6 +254,6 @@ namespace OneTripMover.Views.Player
 
         private float GetTopY(GameObject go) =>
             go.transform.position.y + GetHeight(go) * 0.5f;
-
+        
     }
 }

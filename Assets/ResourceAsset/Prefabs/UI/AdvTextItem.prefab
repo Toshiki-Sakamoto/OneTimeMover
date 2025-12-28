@@ -65,7 +65,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _text: {fileID: 4824325541880343164}
-  _charInterval: 0.02
+  _charInterval: 0.1
 --- !u!1 &6289889408937541874
 GameObject:
   m_ObjectHideFlags: 0

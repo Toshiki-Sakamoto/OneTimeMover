@@ -11,7 +11,7 @@ namespace UI.Adventure
     public class AdventureUITextItemView : MonoBehaviour
     {
         [SerializeField] private TMP_Text _text;
-        [SerializeField] private float _charInterval = 0.02f;
+        [SerializeField] private float _charInterval = 0.1f;
 
         private Coroutine _routine;
         private string _fullText;
@@ -44,9 +44,15 @@ namespace UI.Adventure
             if (_text != null)
             {
                 _text.text = _fullText;
+                _text.maxVisibleCharacters = int.MaxValue;
             }
 
             Complete();
+        }
+
+        public void Exit()
+        {
+            Destroy(gameObject);
         }
 
         private IEnumerator TypeRoutine()
@@ -57,7 +63,7 @@ namespace UI.Adventure
             var total = _text.textInfo.characterCount;
             _text.maxVisibleCharacters = 0;
 
-            for (int i = 0; i <= total; i++)
+            for (var i = 0; i <= total; i++)
             {
                 _text.maxVisibleCharacters = i;
                 yield return new WaitForSeconds(_charInterval);

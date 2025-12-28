@@ -43,7 +43,6 @@ namespace UI.Adventure
 
             _playerInputPublisher?.Publish(new PlayerInputEnableEvent { Enabled = false });
             _inputContextUseCase?.SetUIContext();
-
             _currentView?.ClearView();
             ShowCurrent();
         }
@@ -58,6 +57,8 @@ namespace UI.Adventure
                 return;
             }
 
+            _currentView.ExitCurrentItem();
+            
             _index++;
             if (_index >= _lines.Length)
             {
@@ -92,8 +93,6 @@ namespace UI.Adventure
         private void Finish()
         {
             _isPlaying = false;
-            _playerInputPublisher?.Publish(new PlayerInputEnableEvent { Enabled = true });
-            _inputContextUseCase?.SetPlayerContext();
             _onFinished?.Invoke();
             _onFinished = null;
         }

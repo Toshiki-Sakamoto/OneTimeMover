@@ -9,5 +9,6 @@ namespace UI.Adventure
         void ShowLine(string text, Action onCompleted);
         void SkipAnimation();
         void ClearView();
+        void ExitCurrentItem();
     }
 }

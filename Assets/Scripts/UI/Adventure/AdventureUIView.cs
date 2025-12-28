@@ -10,11 +10,10 @@ namespace UI.Adventure
         [SerializeField] private string _key = "default";
         [SerializeField] private Transform _entriesRoot;
         [SerializeField] private GameObject _entryPrefab;
-        [SerializeField] private float _exitDelay = 0.2f;
 
         private AdventureUITextItemView _currentItem;
+        private AdventureUITextItemView _previousItem;
         private Action _onCompleted;
-        private Coroutine _exitRoutine;
 
         public string Key => _key;
         public bool IsAnimating => _currentItem != null && _currentItem.IsAnimating;
@@ -44,6 +43,21 @@ namespace UI.Adventure
             _currentItem?.Skip();
         }
 
+        public void ExitCurrentItem()
+        {
+            if (_currentItem != null)
+            {
+                _currentItem.Exit();
+                _previousItem = _currentItem;
+                _currentItem = null;
+            }
+            else if (_previousItem != null)
+            {
+                _previousItem.Exit();
+                _previousItem = null;
+            }
+        }
+
         public void ClearView()
         {
             if (_entriesRoot == null) return;
@@ -51,6 +65,8 @@ namespace UI.Adventure
             {
                 Destroy(_entriesRoot.GetChild(i).gameObject);
             }
+            _currentItem = null;
+            _previousItem = null;
         }
 
         private void FinishImmediate(string text)
@@ -63,6 +79,7 @@ namespace UI.Adventure
                 {
                     item.Play(text, null);
                     item.Skip();
+                    _previousItem = item;
                 }
                 else
                 {
@@ -75,22 +92,8 @@ namespace UI.Adventure
 
         private void Complete()
         {
-            if (_exitRoutine != null)
-            {
-                StopCoroutine(_exitRoutine);
-            }
-            _exitRoutine = StartCoroutine(ExitDelayRoutine());
         }
 
-        private IEnumerator ExitDelayRoutine()
-        {
-            yield return new WaitForSeconds(_exitDelay);
-            var callback = _onCompleted;
-            _onCompleted = null;
-            _currentItem = null;
-            _exitRoutine = null;
-            callback?.Invoke();
-        }
 
         private void OnItemCompleted()
         {

@@ -7,17 +7,21 @@ namespace Core.Game
 {
     public class GamePhasePlayHandler : IGamePhasePlayHandler
     {
+        private readonly IInputContextUseCase _inputContextUseCase;
         private readonly IPublisher<GameStartedEvent> _gameStartedEventPublisher;
         private readonly IPublisher<PlayerInputEnableEvent> _playerInputEnableEventPublisher;
 
         public GamePhasePlayHandler()
         {
+            _inputContextUseCase = ServiceLocator.Resolve<IInputContextUseCase>();
             _gameStartedEventPublisher = ServiceLocator.Resolve<IPublisher<GameStartedEvent>>();
             _playerInputEnableEventPublisher = ServiceLocator.Resolve<IPublisher<PlayerInputEnableEvent>>();
         }
         
         public void OnEnter(IPhaseContext<GamePhase> context)
         {
+            _inputContextUseCase.SetPlayerContext();
+            
             _playerInputEnableEventPublisher.Publish(new PlayerInputEnableEvent { Enabled = true });
             _gameStartedEventPublisher.Publish(new GameStartedEvent());
         }

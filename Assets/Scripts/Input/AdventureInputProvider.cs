@@ -20,6 +20,8 @@ namespace OneTripMover.Input
         {
             _publisher = publisher;
             _actions = actions;
+
+            OnEnable();
         }
 
         private void OnEnable()

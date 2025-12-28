@@ -58,6 +58,7 @@ namespace OneTripMover.Infrastructure
             RegisterSingleton<GameOverUIViewEventHandler, GameOverUIViewEventHandler>();
             RegisterSingleton<IAdventureService, AdventureService>();
             RegisterSingleton<AdventureUIController, AdventureUIController>();
+            RegisterSingleton<AdventureUIEventHandler, AdventureUIEventHandler>();
             RegisterSingleton<InputSystem_Actions, InputSystem_Actions>();
             RegisterSingleton<OneTripMover.Input.IInputContextUseCase, OneTripMover.Input.InputContextUseCase>();
 

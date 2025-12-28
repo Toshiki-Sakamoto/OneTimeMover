@@ -24,32 +24,39 @@ namespace OneTripMover.Input
             _playerInputEventPublisher = inputPublisher;
             _pickupInputEventPublisher = pickupInputPublisher;
             _actions = actions;
+
+            OnEnable();
         }
 
         private void OnEnable()
         {
             if (_actions == null) return;
-            _actions.Player.Move.performed += OnMove;
-            _actions.Player.Move.canceled += OnMove;
             _actions.Player.Balance.performed += OnBalance;
             _actions.Player.Balance.canceled += OnBalance;
             _actions.Player.Pick.performed += OnPick;
+
+            _actions.Player.Enable();
         }
 
         private void OnDisable()
         {
             if (_actions == null) return;
-            _actions.Player.Move.performed -= OnMove;
-            _actions.Player.Move.canceled -= OnMove;
             _actions.Player.Balance.performed -= OnBalance;
             _actions.Player.Balance.canceled -= OnBalance;
             _actions.Player.Pick.performed -= OnPick;
+
+            _actions.Player.Disable();
         }
 
-        private void OnMove(InputAction.CallbackContext ctx)
+        private void Update()
         {
-            var move = ctx.ReadValue<Vector2>();
-            _playerInputEventPublisher.Publish(new PlayerInputEvent(move, 0f));
+            if (_actions == null) return;
+            
+            var move = _actions.Player.Move.ReadValue<Vector2>();
+            if (move != Vector2.zero)
+            {
+                _playerInputEventPublisher.Publish(new PlayerInputEvent(move, 0f));
+            }
         }
 
         private void OnBalance(InputAction.CallbackContext ctx)
