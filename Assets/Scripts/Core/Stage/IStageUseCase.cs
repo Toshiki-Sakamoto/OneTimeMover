@@ -21,6 +21,8 @@ namespace Core.Stage
         void GainOneMoreBonus();
         void LosePerfectBonus();
         void LoseOneMoreBonus();
+        int GetPerfectBonusAmount();
+        int GetOneMoreBonusAmount();
         
         /// <summary>
         /// 初期荷物数の取得

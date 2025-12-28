@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eedb10002aa423a9acb550b95de1dcc, type: 3}
+  m_Name: TVTableCargo
+  m_EditorClassIdentifier: 
+  _id:
+    _value: 1709225150
+  _cargoView:
+    m_AssetGUID: 9bd39f5f0106a5a4f87cc83254eb0ab2
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _cost:
+    _amount: 1000

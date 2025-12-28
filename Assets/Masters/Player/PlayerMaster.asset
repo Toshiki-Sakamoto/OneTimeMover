@@ -17,4 +17,4 @@ MonoBehaviour:
   _limitAngleDeg: 25
   _initialMoney: 0
   _moveForce: 1000
-  _maxMoveSpeed: 11
+  _maxMoveSpeed: 0.3

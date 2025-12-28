@@ -87,24 +87,21 @@ namespace OneTripMover.Views.Player
             ConnectJoint(view);
 
             _cargoViews.Add(handle);
-            _cargoViewRegistry?.AddCurrent(view);
-            TopCargoView = _cargoViewRegistry?.GetTopCurrentView() ?? view;
+            _cargoViewRegistry.AddCurrent(view);
+            TopCargoView = _cargoViewRegistry.GetTop();
         }
 
         public void AttachExistingCargo(CargoView view, bool isOneMoreCargo)
         {
-            if (view == null) return;
             if (isOneMoreCargo)
             {
                 _oneMoreBonusAcquiredPublisher?.Publish(new OneMoreBonusAcquiredEvent { CargoMasterId = view.MasterId });
             }
-            _cargoViewRegistry?.AddCurrent(view);
-            TopCargoView = _cargoViewRegistry?.GetTopCurrentView() ?? view;
         }
         
         public void SetAllCargoBreakAction(JointBreakAction2D breakAction)
         {
-            var views = _cargoViewRegistry?.GetCurrentViews();
+            var views = _cargoViewRegistry.GetCurrentViews();
             if (views == null) return;
             foreach (var view in views)
             {
@@ -137,7 +134,7 @@ namespace OneTripMover.Views.Player
             _cargoViewRegistry?.RemoveCurrent(cargoView);
             _cargoViewRegistry?.AddDropped(cargoView);
 
-            TopCargoView = _cargoViewRegistry?.GetTopCurrentView();
+            TopCargoView = _cargoViewRegistry?.GetTop();
 
             _topBreakCooldownUntil = Time.time + _topBreakCooldownSeconds;
         }
@@ -261,6 +258,14 @@ namespace OneTripMover.Views.Player
             FreezeAllCargo();
         }
 
+        public void SetDangerIndicatorActive(bool active)
+        {
+            if (_dangerIndicator != null)
+            {
+                _dangerIndicator.gameObject.SetActive(active);
+            }
+        }
+
         private void FreezeAllCargo()
         {
             var views = _cargoViewRegistry?.GetCurrentViews();
@@ -296,6 +301,8 @@ namespace OneTripMover.Views.Player
             var col = view.GetComponent<Collider2D>();
             if (col != null) col.enabled = false;
         }
+
+        private CargoView GetLastCurrentView() => _cargoViewRegistry?.GetTop();
         
     }
 }

@@ -25,6 +25,8 @@ namespace Master
         [SerializeField] private CargoMaster[] _dropCargoMasters;
         [SerializeField] private AdvText _introAdventure;
         [SerializeField] private AdvText _clearAdventure;
+        [SerializeField] private int _perfectBonusAmount = 0;
+        [SerializeField] private int _oneMoreBonusAmount = 0;
 
         public int StageId => _stageID;
         public string Scene => _sceneName;
@@ -34,6 +36,8 @@ namespace Master
         public ICargoMaster[] DropCargoMasters => _dropCargoMasters;
         public AdvText IntroAdventure => _introAdventure;
         public AdvText ClearAdventure => _clearAdventure;
+        public int PerfectBonusAmount => _perfectBonusAmount;
+        public int OneMoreBonusAmount => _oneMoreBonusAmount;
 
         protected override void OnValidateCore()
         {

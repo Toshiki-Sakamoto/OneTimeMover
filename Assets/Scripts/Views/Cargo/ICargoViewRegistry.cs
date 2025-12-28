@@ -9,7 +9,7 @@ namespace Views.Cargo
         void AddDropped(CargoView view);
         IReadOnlyList<CargoView> GetCurrentViews();
         IReadOnlyList<CargoView> GetDroppedViews();
-        CargoView GetTopCurrentView();
+        CargoView GetTop();
         void ClearAll();
     }
 }

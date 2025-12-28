@@ -86,22 +86,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cargo-Table
       objectReference: {fileID: 0}
-    - target: {fileID: 4940608646585964810, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
-      propertyPath: m_Frequency
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4940608646585964810, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
-      propertyPath: m_DampingRatio
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4940608646585964810, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 1.57
-      objectReference: {fileID: 0}
-    - target: {fileID: 4940608646585964810, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
-      propertyPath: m_ConnectedAnchor.y
-      value: -3.1799998
-      objectReference: {fileID: 0}
     - target: {fileID: 6661683602366955046, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
       propertyPath: m_Mass
       value: 10
@@ -112,11 +96,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7005264154168537335, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.96731204
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7005264154168537335, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.25358906
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7005264154168537335, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
       propertyPath: m_LocalRotation.z
@@ -124,7 +108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7005264154168537335, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 29.38
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7005264154168537335, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

@@ -7,6 +7,7 @@ using Core.Phase;
 using Core.Player;
 using Core.Money;
 using OneTripMover.Master;
+using OneTripMover.Input;
 using OneTripMover.Views.Player;
 using Unity.VisualScripting;
 using IInitializable = Core.Common.IInitializable;
@@ -19,6 +20,7 @@ namespace OneTripMover.Core
         private IPhaseService<GamePhase> _gamePhaseService;
         private IGameEventHandlers _gameEventHandlers;
         private IMoneyUseCase _moneyUseCase;
+        private IInputContextUseCase _inputContextUseCase;
 
         public void Initialize()
         {
@@ -26,6 +28,9 @@ namespace OneTripMover.Core
             _gamePhaseService = ServiceLocator.Resolve<IPhaseService<GamePhase>>();
             _gameEventHandlers = ServiceLocator.Resolve<IGameEventHandlers>();
             _moneyUseCase = ServiceLocator.Resolve<IMoneyUseCase>();
+            _inputContextUseCase = ServiceLocator.Resolve<IInputContextUseCase>();
+            
+            _inputContextUseCase?.SetUIContext();
             
             _gamePhaseService.Initialize();
         }

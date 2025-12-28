@@ -1,38 +1,39 @@
-using System;
-using System.Collections;
-using Febucci.TextAnimatorForUnity;
-using Febucci.TextAnimatorForUnity.TextMeshPro;
-using TMPro;
+using System.Threading.Tasks;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 
 namespace UI.Bonus
 {
-    [RequireComponent(typeof(TextAnimator_TMP))]
+    [RequireComponent(typeof(MMF_Player))]
     public class BonusUIItemView : MonoBehaviour
     {
-        [SerializeField] private string _showText;
-//        [SerializeField] private TextMeshProUGUI _textMeshPro;
-        private TextAnimator_TMP _textAnimator;
-  //      [SerializeField] private TypewriterComponent _textAnimatorPlayer;
-        [SerializeField] private float _duration = 1.0f;
+        [SerializeField] private float _durationSeconds = 1.0f;
+        private CanvasGroup _canvasGroup;
+        private MMF_Player _player;
+        private Vector3 _startPos;
 
-        public IEnumerator PlayAndWait()
+        public async Task PlayAndWait(System.Action onCompleted = null)
         {
-            _textAnimator.SetText($"<rainb>{_showText}</rainb>");
+            if (_player != null)
+            {
+                _player.PlayFeedbacks();
+            }
+            
+            var ms = Mathf.Max(0f, _durationSeconds) * 1000f;
+            await Task.Delay((int)ms);
+            onCompleted?.Invoke();
+        }
 
-            yield return new WaitForSeconds(_duration);
-            Destroy(gameObject);
+        public void ResetPosition()
+        {
+            transform.localPosition = _startPos;
+            _canvasGroup.alpha = 1f;
         }
         
-        public void SetDefaultText()
-        {
-            _textAnimator.SetText(_showText);
-        }
-
         private void Awake()
         {
-            _textAnimator = GetComponent<TextAnimator_TMP>();
-            SetDefaultText();
+            _player = GetComponent<MMF_Player>();
+            _canvasGroup = GetComponent<CanvasGroup>();
         }
     }
 }

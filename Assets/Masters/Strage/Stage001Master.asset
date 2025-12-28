@@ -20,7 +20,11 @@ MonoBehaviour:
   _initCargoNum: 3
   _initCargoMasters:
   - {fileID: 11400000, guid: df4d19f907c0bf1449bbe97f5444857d, type: 2}
-  _dropCargoMasters:
   - {fileID: 11400000, guid: e364ef77764fdc8408719125df54fe13, type: 2}
+  - {fileID: 11400000, guid: e417c31a98404884087c30b063c0a188, type: 2}
+  _dropCargoMasters:
+  - {fileID: 11400000, guid: 01a511dd562948e4fb7287c9325c4d36, type: 2}
   _introAdventure: {fileID: 11400000, guid: 07562076dfb80f04abb92a351541ae70, type: 2}
   _clearAdventure: {fileID: 0}
+  _perfectBonusAmount: 2000
+  _oneMoreBonusAmount: 2000

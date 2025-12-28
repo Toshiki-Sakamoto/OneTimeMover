@@ -27,6 +27,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - CargoView
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9bd39f5f0106a5a4f87cc83254eb0ab2
+    m_Address: Assets/ResourceAsset/Prefabs/Cargo/Cargo-TV_Stand.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CargoView
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d456262623b8dee448e634871c78abf6
+    m_Address: Assets/ResourceAsset/Prefabs/Cargo/Cargo-Sheiving.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CargoView
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d78d1fb0e23f5a14a889d5331e965005
     m_Address: Assets/ResourceAsset/Prefabs/Cargo/Cargo-Table 1.prefab
     m_ReadOnly: 0

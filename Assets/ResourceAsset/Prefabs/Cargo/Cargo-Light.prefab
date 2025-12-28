@@ -103,10 +103,6 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4940608646585964810, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
-      propertyPath: m_DampingRatio
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4940608646585964810, guid: d78d1fb0e23f5a14a889d5331e965005, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: 0
       objectReference: {fileID: 0}

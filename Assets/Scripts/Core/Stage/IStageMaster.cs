@@ -12,14 +12,17 @@ namespace Core.Stage
         int InitCargoNum { get; }
         
         /// <summary>
-        /// 初期積荷マスター一覧
+        /// 初期荷物セット
         /// </summary>
         ICargoMaster[] InitCargoMasters { get; }
         
         /// <summary>
-        /// ドロップ積荷マスター一覧
+        /// ドロップ荷物セット
         /// </summary>
         ICargoMaster[] DropCargoMasters { get; }
+
+        int PerfectBonusAmount { get; }
+        int OneMoreBonusAmount { get; }
 
         Core.Adventure.AdvText IntroAdventure { get; }
         Core.Adventure.AdvText ClearAdventure { get; }

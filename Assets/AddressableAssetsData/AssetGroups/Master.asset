@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Master
   m_GUID: 812c3af52c750b34f81ab97401de202d
   m_SerializeEntries:
+  - m_GUID: 01a511dd562948e4fb7287c9325c4d36
+    m_Address: Assets/Masters/Cargo/TVTableCargo 1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cargo
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 450be3b1aabcd5c47abc0737aad8e6d8
     m_Address: Assets/Masters/Strage/Stage001Master.asset
     m_ReadOnly: 0
@@ -26,6 +32,24 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Cargo
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e364ef77764fdc8408719125df54fe13
+    m_Address: Assets/Masters/Cargo/TableCargo.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cargo
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e417c31a98404884087c30b063c0a188
+    m_Address: Assets/Masters/Cargo/TableCargo 1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cargo
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e663af19458bde2488efb2aa1d180726
+    m_Address: Assets/Masters/Player/PlayerMaster.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Player
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f7a913e8394b41d43b6408eb0d8113ad
     m_Address: Assets/Masters/Define/DefineMaster.asset

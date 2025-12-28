@@ -95,6 +95,18 @@ namespace OneTripMover.UseCase
             return masters[randomIndex];
         }
 
+        public int GetPerfectBonusAmount()
+        {
+            var master = GetCurrentStageMaster();
+            return master != null ? master.PerfectBonusAmount : 0;
+        }
+
+        public int GetOneMoreBonusAmount()
+        {
+            var master = GetCurrentStageMaster();
+            return master != null ? master.OneMoreBonusAmount : 0;
+        }
+
         private IStageMaster GetCurrentStageMaster()
         {
             var currentStageId = _stageRepository.GetCurrentStageId();
